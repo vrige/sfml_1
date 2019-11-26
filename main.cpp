@@ -21,13 +21,24 @@ int main()
 
 
     Player player(tileSetForPlayer,tileSize);
-    TileMap map(x,y,tiles,tileSize,percentageOfZeros);
+    TileMap map(x,y,tiles,tileSize,percentageOfZeros,&player);
 
-    if (!map.load(tileSet,&player,posInitPlayer)){
+    if (!map.load(tileSet,posInitPlayer)){
         cout<<"problemi nel rendering della mappa"<<endl;
         return -1;
     }
-
+    if(!map.checkGridPossibileMove('r')){
+        cout<<"can't go right"<< endl;
+    }
+    if(!map.checkGridPossibileMove('l')){
+        cout<<"can't go left"<< endl;
+    }
+    if(!map.checkGridPossibileMove('u')){
+        cout<<"can't go up"<< endl;
+    }
+    if(!map.checkGridPossibileMove('d')){
+        cout<<"can't go down"<< endl;
+    }
 
     while (window.isOpen())
     {

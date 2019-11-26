@@ -1,16 +1,18 @@
 #include "TileMap.h"
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize):width(x),height(y),tiles(tiles),m_tileSize(tileSize){
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player):
+width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];
     matXCasuale(matX,x,y,tiles);
     print(matX,x,y);
 }
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri):width(x),height(y),tiles(tiles),m_tileSize(tileSize){
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri, Player* player):
+width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];
     matXCasualeWithPercentage(matX,x,y,tiles,percentualeZeri);
     print(matX,x,y);
 }
 TileMap::~TileMap() {
-    std::cout<<"delete matX"<<std::endl;
+    std::cout<<"delete matX and player"<<std::endl;
     delete matX;
     delete player;
 }
@@ -32,7 +34,7 @@ void TileMap::matXCasualeWithPercentage(int* matX, int x, int y, int n, int perc
     }
     //print(matX,x,y);
 }
-bool TileMap::load(const std::string& tileset, Player* player, sf::Vector2i pos)
+bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
 {
     if (!m_tileset.loadFromFile(tileset)){
         std::cout<<"problemi nello scaricare la texture"<< std::endl;
@@ -94,7 +96,6 @@ bool TileMap::playerStartGreen(Player* player, sf::Vector2i pos){
                 std::cout<<"sono ancora nel while" << std::endl;
             }
         }
-        this->player = player;
         this->player->setPos(sf::Vector2i(i,j));
         this->player->setPosizione(sf::Vector2f(i*m_tileSize.x,j*m_tileSize.y));
         return true;
@@ -117,5 +118,38 @@ int TileMap::genRandomNumberWithPercentage(int n, int percentage){
     }
     i = (i % (n - 1)) + 1;
     return i;
+}
+bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
+    sf::Vector2i pos = this->player->getPos();
+    std::cout<<"pos player: "<< pos.x <<" " <<pos.y<< std::endl;
+    switch(direction){
+        case 'u':
+            if(matX[pos.x + (pos.y - 1)* width] != 0 || pos.y == 0 ){
+                std::cout<<"can't go up"<<std::endl;
+                return false;
+            }
+            break;
+        case 'd':
+            if(matX[pos.x + (pos.y + 1)* width] != 0 || pos.y == height - 1 ){
+                std::cout<<"can't go down"<<std::endl;
+                return false;
+            }
+            break;
+        case 'l':
+            if(matX[(pos.x - 1) + pos.y * width] != 0 || pos.x == 0 ){
+                std::cout<<"can't go left"<<std::endl;
+                return false;
+            }
+            break;
+        case 'r':
+            if(matX[(pos.x + 1) + pos.y * width] != 0 || pos.y == width - 1 ){
+                std::cout<<"can't go right"<<std::endl;
+                return false;
+            }
+            break;
+        default:
+            std::cout<<"problemi nella scelta della direzione"<<std::endl;
+    }
+    return true;
 }
 

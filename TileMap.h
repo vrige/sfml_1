@@ -10,15 +10,16 @@
 class TileMap  : public sf::ConvexShape{
 public:
 
-    TileMap( int x, int y, int tiles, sf::Vector2u tileSize);
-    TileMap( int x, int y, int tiles,sf::Vector2u tileSize, int percentualeZeri);
+    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player);
+    TileMap( int x, int y, int tiles,sf::Vector2u tileSize, int percentualeZeri, Player* player);
 
     virtual ~TileMap();
 
     static void matXCasuale(int* matX, int x, int y, int n);
     static void matXCasualeWithPercentage(int* matX, int x, int y, int n, int percentage);
 
-    bool load(const std::string& tileset, Player* player, sf::Vector2i pos);
+    bool load(const std::string& tileset, sf::Vector2i pos);
+    bool checkGridPossibileMove(char direction);
 
     template <class myType>
         static void print(const myType* matX,const int x, const int y){
