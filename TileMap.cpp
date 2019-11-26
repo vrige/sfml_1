@@ -12,6 +12,7 @@ TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentual
 TileMap::~TileMap() {
     std::cout<<"delete matX"<<std::endl;
     delete matX;
+    delete player;
 }
 void TileMap::matXCasuale(int* matX, int x, int y, int n){
     srand((unsigned)time(nullptr));
@@ -31,7 +32,7 @@ void TileMap::matXCasualeWithPercentage(int* matX, int x, int y, int n, int perc
     }
     //print(matX,x,y);
 }
-bool TileMap::load(const std::string& tileset)
+bool TileMap::load(const std::string& tileset, Player* player, sf::Vector2i pos)
 {
     if (!m_tileset.loadFromFile(tileset)){
         std::cout<<"problemi nello scaricare la texture"<< std::endl;
@@ -62,7 +63,46 @@ bool TileMap::load(const std::string& tileset)
             quad[3].texCoords = sf::Vector2f(tu * m_tileSize.x, (tv + 1) * m_tileSize.y);
         }
     }
-    return true;
+    if(playerStartGreen(player,pos)){
+        std::cout<<"player correttamente allocato"<< std::endl;
+        return true;
+    }
+    std::cout<<"la posizione del personaggio è fuori dal tileset"<<std::endl;
+    return false;
+}
+bool TileMap::playerStartGreen(Player* player, sf::Vector2i pos){
+    if(0 <= pos.x && pos.x < width && 0 <= pos.y && pos.y < height){
+        unsigned int i = pos.x;
+        unsigned int j = pos.y;
+        if(matX[i + j * width] != 0){
+            std::cout<<"l'allocazione fornita non è uno spazio verde."<<std::endl;
+            std::cout<<"Verrà assegnato il primo spazio verde disponibile"<<std::endl;
+            i = 0;
+            j = 0;
+            while(matX[i + j * width] != 0){
+                if(i == (width - 1) && j != (height - 1)){
+                    i = 0;
+                    j++;
+                }
+                else if(i != (width - 1)){
+                    i++;
+                }
+                else{
+                    std::cout<<"non ci sono spazi verdi dove allocare il player" << std::endl;
+                    return false;
+                }
+                std::cout<<"sono ancora nel while" << std::endl;
+            }
+        }
+        this->player = player;
+        this->player->setPos(sf::Vector2i(i,j));
+        this->player->setPosizione(sf::Vector2f(i*m_tileSize.x,j*m_tileSize.y));
+        return true;
+    }
+    else{
+        std::cout<<"la posizione del personaggio è fuori dal tileset"<<std::endl;
+        return false;
+    }
 }
 int TileMap::genRandomNumber(int n){
     int i;

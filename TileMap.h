@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 
 class TileMap  : public sf::ConvexShape{
 public:
@@ -17,7 +18,7 @@ public:
     static void matXCasuale(int* matX, int x, int y, int n);
     static void matXCasualeWithPercentage(int* matX, int x, int y, int n, int percentage);
 
-    bool load(const std::string& tileset);
+    bool load(const std::string& tileset, Player* player, sf::Vector2i pos);
 
     template <class myType>
         static void print(const myType* matX,const int x, const int y){
@@ -39,6 +40,7 @@ public:
             std::cout<<std::endl;
         }
 private:
+    bool playerStartGreen(Player* player, sf::Vector2i pos);
     static int genRandomNumber(int n);
     static int genRandomNumberWithPercentage(int n, int percentage);
 
@@ -48,6 +50,7 @@ private:
     sf::VertexArray m_vertices;
     sf::Texture m_tileset;
     sf::Vector2u m_tileSize;
+    Player* player;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
     {

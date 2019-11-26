@@ -17,18 +17,17 @@ int main()
     string tileSet = "C:/Users/cristina/CLionProjects/sfml_1/img/tileset.png";
     string tileSetForPlayer = "C:/Users/cristina/CLionProjects/sfml_1/img/game34x34.png";
     sf::Vector2u tileSize(32, 32);
-//    sf::Vector2i posInitPlayer(16,16);
+    sf::Vector2i posInitPlayer(16,16);
 
 
     Player player(tileSetForPlayer,tileSize);
-
-
     TileMap map(x,y,tiles,tileSize,percentageOfZeros);
 
-    if (!map.load(tileSet)){
+    if (!map.load(tileSet,&player,posInitPlayer)){
         cout<<"problemi nel rendering della mappa"<<endl;
         return -1;
     }
+
 
     while (window.isOpen())
     {
