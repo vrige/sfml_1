@@ -3,7 +3,7 @@ project(sfml_1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories("C:/users/cristina/CLionProjects/sfml_1")
+##include_directories("C:/users/cristina/CLionProjects/sfml_1")
 
 ## If you want to link SFML statically
 set(SFML_STATIC_LIBRARIES TRUE)

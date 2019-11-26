@@ -16,7 +16,6 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../"
   "D:/Libraries/SFML-2.5.1/include"
   )
 
