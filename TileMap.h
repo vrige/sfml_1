@@ -23,6 +23,7 @@ public:
     bool checkGridPossibileMove(char direction);
 
     sf::Vector2i getGoal();
+    sf::Vector2i getPosPlayer();
 
     template <class myType>
         static void print(const myType* matX,const int x, const int y){

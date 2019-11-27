@@ -190,3 +190,6 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
 sf::Vector2i TileMap::getGoal(){
     return goal;
 }
+sf::Vector2i TileMap::getPosPlayer(){
+    return player->getPos();
+}

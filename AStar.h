@@ -1,6 +1,7 @@
 #ifndef SFML_1_ASTAR_H
 #define SFML_1_ASTAR_H
 
+#include <cstdlib>
 #include <iostream>
 #include "TileMap.h"
 
@@ -14,11 +15,17 @@ class AStar {
 public:
     AStar(TileMap* tilemap, sf::Vector2i goal);
     //getSolution()
+
 private:
+    int h_heuristic();
+    int g_distance();
+    int f_heuristic();
     //bool aStar();
     //store solution
     TileMap* tilemap;
     sf::Vector2i goal;
+    sf::Vector2i posInit;
+    sf::Vector2i posPlayer;
 };
 
 
