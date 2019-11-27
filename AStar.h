@@ -1,6 +1,7 @@
 #ifndef SFML_1_ASTAR_H
 #define SFML_1_ASTAR_H
 
+#include <iostream>
 #include "TileMap.h"
 
 class AStar {
@@ -11,10 +12,13 @@ class AStar {
 //Dopo di ciò marcare il path con un colore diverso
 //Infine fare in modo che premendo il tasto A si azioni AStar
 public:
-    bool aStar(TileMap& tilemap, int goalx, int goaly );
+    AStar(TileMap* tilemap, sf::Vector2i goal);
     //getSolution()
 private:
+    //bool aStar();
     //store solution
+    TileMap* tilemap;
+    sf::Vector2i goal;
 };
 
 

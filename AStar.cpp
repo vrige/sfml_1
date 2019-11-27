@@ -1,4 +1,4 @@
 #include "AStar.h"
-bool AStar::aStar(TileMap& tilemap, int goalx, int goaly ){
-    return true;
+AStar::AStar(TileMap* tilemap, sf::Vector2i goal ): tilemap(tilemap), goal(goal){
+    std::cout<<"creazione di Astar"<< std::endl;
 }

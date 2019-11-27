@@ -42,6 +42,7 @@ void TileMap::generateGoal() {
     } while (goalx != player->getPos().x && goaly != player->getPos().y);
     std::cout << "trovato un goal possibile in: "<<goalx<<" "<<goaly << std::endl;
     matX[goalx + width * goaly] = 5; //5 è il goal
+    goal = sf::Vector2i(goalx,goaly);
 }
 bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
 {
@@ -83,14 +84,14 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
             }
         }
     }
-    if(playerStartGreen(player,pos)){
+    if(playerStartGreen(pos)){
         std::cout<<"player correttamente allocato"<< std::endl;
         return true;
     }
     std::cout<<"la posizione del personaggio è fuori dal tileset"<<std::endl;
     return false;
 }
-bool TileMap::playerStartGreen(Player* player, sf::Vector2i pos){
+bool TileMap::playerStartGreen( sf::Vector2i pos){
     if(0 <= pos.x && pos.x < width && 0 <= pos.y && pos.y < height){
         unsigned int i = pos.x;
         unsigned int j = pos.y;
@@ -163,7 +164,7 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
             break;
         case 'l':
             if(matX[(pos.x - 1) + pos.y * width] != 0 || pos.x == 0 ){
-                if( matX[pos.x + (pos.y - 1)* width] == 5){
+                if( matX[(pos.x - 1) + pos.y * width] == 5){
                     std::cout<<"ma quello è il goal!"<<std::endl;
                 }else{
                     std::cout<<"can't go left"<<std::endl;
@@ -173,7 +174,7 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
             break;
         case 'r':
             if(matX[(pos.x + 1) + pos.y * width] != 0  || pos.y == width - 1 ) {
-                if (matX[pos.x + (pos.y - 1)* width] == 5) {
+                if(matX[(pos.x + 1) + pos.y * width] == 5) {
                     std::cout << "ma quello è il goal!" << std::endl;
                 } else {
                     std::cout << "can't go right" << std::endl;
@@ -186,4 +187,6 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
     }
     return true;
 }
-
+sf::Vector2i TileMap::getGoal(){
+    return goal;
+}

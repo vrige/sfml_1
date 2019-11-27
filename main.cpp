@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TileMap.h"
 #include "Player.h"
+#include "AStar.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ int main()
     int x = 20;
     int y = 20;
     int tiles = 4;
-    int percentageOfZeros = 65;
+    int percentageOfZeros = 85;
     float speedView = 30;
     string tileSet = "C:/Users/cristina/CLionProjects/sfml_1/img/tileset.png";
     string tileSetForPlayer = "C:/Users/cristina/CLionProjects/sfml_1/img/game34x34.png";
@@ -29,6 +30,7 @@ int main()
         return -1;
     }
 
+    AStar aStar(&map, map.getGoal());
 
     sf::View view1(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
     view1.setSize(736.f, 736.f);
