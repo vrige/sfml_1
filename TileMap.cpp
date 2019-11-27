@@ -39,7 +39,7 @@ void TileMap::generateGoal() {
     do {
         goalx = genRandomNumber(width);
         goaly = genRandomNumber(height);
-    } while (matX[goalx + goaly * width] != 0);
+    } while (goalx != player->getPos().x && goaly != player->getPos().y);
     std::cout << "trovato un goal possibile in: "<<goalx<<" "<<goaly << std::endl;
     matX[goalx + width * goaly] = 5; //5 è il goal
 }
@@ -142,27 +142,43 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
     std::cout<<"pos player: "<< pos.x <<" " <<pos.y<< std::endl;
     switch(direction){
         case 'u':
-            if(matX[pos.x + (pos.y - 1)* width] != 0 || pos.y == 0 ){
-                std::cout<<"can't go up"<<std::endl;
-                return false;
+            if(matX[pos.x + (pos.y - 1)* width] != 0 || pos.y == 0){
+                if( matX[pos.x + (pos.y - 1)* width] == 5){
+                    std::cout<<"ma quello è il goal!"<<std::endl;
+                }else{
+                    std::cout<<"can't go up"<<std::endl;
+                    return false;
+                }
             }
             break;
         case 'd':
             if(matX[pos.x + (pos.y + 1)* width] != 0 || pos.y == height - 1 ){
-                std::cout<<"can't go down"<<std::endl;
-                return false;
+                if(  matX[pos.x + (pos.y + 1)* width] == 5){
+                    std::cout<<"ma quello è il goal!"<<std::endl;
+                }else{
+                    std::cout<<"can't go down"<<std::endl;
+                    return false;
+                }
             }
             break;
         case 'l':
             if(matX[(pos.x - 1) + pos.y * width] != 0 || pos.x == 0 ){
-                std::cout<<"can't go left"<<std::endl;
-                return false;
+                if( matX[pos.x + (pos.y - 1)* width] == 5){
+                    std::cout<<"ma quello è il goal!"<<std::endl;
+                }else{
+                    std::cout<<"can't go left"<<std::endl;
+                    return false;
+                }
             }
             break;
         case 'r':
-            if(matX[(pos.x + 1) + pos.y * width] != 0 || pos.y == width - 1 ){
-                std::cout<<"can't go right"<<std::endl;
-                return false;
+            if(matX[(pos.x + 1) + pos.y * width] != 0  || pos.y == width - 1 ) {
+                if (matX[pos.x + (pos.y - 1)* width] == 5) {
+                    std::cout << "ma quello è il goal!" << std::endl;
+                } else {
+                    std::cout << "can't go right" << std::endl;
+                    return false;
+                }
             }
             break;
         default:

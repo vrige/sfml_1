@@ -122,11 +122,11 @@ int main()
             }
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
-            view1.zoom(0.98f);
+            view1.zoom(0.99f);
             cout<<"zoom in"<< endl;
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::X)){
-            view1.zoom(1.02f);
+            view1.zoom(1.01f);
             cout<<"zoom out"<< endl;
         }
 

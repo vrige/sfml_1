@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
+#include <set>
 #include "Player.h"
 
 class TileMap  : public sf::ConvexShape{
