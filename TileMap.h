@@ -30,7 +30,6 @@ public:
                         a += std::to_string(matX[i + j * x]) + " ";
                     }
                     else if(typeid(char) == typeid(myType)){
-
                         a += matX[i + j * x];
                         a += " ";
                     }
@@ -41,6 +40,7 @@ public:
             std::cout<<std::endl;
         }
 private:
+    void generateGoal();
     bool playerStartGreen(Player* player, sf::Vector2i pos);
     static int genRandomNumber(int n);
     static int genRandomNumberWithPercentage(int n, int percentage);

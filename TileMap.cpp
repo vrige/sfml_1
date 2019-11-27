@@ -34,6 +34,15 @@ void TileMap::matXCasualeWithPercentage(int* matX, int x, int y, int n, int perc
     }
     //print(matX,x,y);
 }
+void TileMap::generateGoal() {
+    int goalx, goaly;
+    do {
+        goalx = genRandomNumber(width);
+        goaly = genRandomNumber(height);
+    } while (matX[goalx + goaly * width] != 0);
+    std::cout << "trovato un goal possibile in: "<<goalx<<" "<<goaly << std::endl;
+    matX[goalx + width * goaly] = 5; //5 è il goal
+}
 bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
 {
     if (!m_tileset.loadFromFile(tileset)){
@@ -41,28 +50,37 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
         return false;
     }
 
+    generateGoal();
+
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4 ); //ogni elemento della matX ha 4 punti
 
-    for (unsigned int i = 0; i < width; ++i){
-        for (unsigned int j = 0; j < height; ++j)
+    for (int i = 0; i < width; ++i){
+        for ( int j = 0; j < height; ++j)
         {
             int tileNumber = matX[i + j * width];
 
             int tu = tileNumber % (m_tileset.getSize().x / m_tileSize.x);
-            int tv = tileNumber / (m_tileset.getSize().x / m_tileSize.x);
+            int tv = tileNumber / (m_tileset.getSize().x / m_tileSize.x); //nel nostro caso è sempre zero
 
-            sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
+            sf::Vertex *quad = &m_vertices[(i + j * width) * 4];
 
             quad[0].position = sf::Vector2f(i * m_tileSize.x, j * m_tileSize.y);
             quad[1].position = sf::Vector2f((i + 1) * m_tileSize.x, j * m_tileSize.y);
             quad[2].position = sf::Vector2f((i + 1) * m_tileSize.x, (j + 1) * m_tileSize.y);
             quad[3].position = sf::Vector2f(i * m_tileSize.x, (j + 1) * m_tileSize.y);
-
-            quad[0].texCoords = sf::Vector2f(tu * m_tileSize.x, tv * m_tileSize.y);
-            quad[1].texCoords = sf::Vector2f((tu + 1) * m_tileSize.x, tv * m_tileSize.y);
-            quad[2].texCoords = sf::Vector2f((tu + 1) * m_tileSize.x, (tv + 1) * m_tileSize.y);
-            quad[3].texCoords = sf::Vector2f(tu * m_tileSize.x, (tv + 1) * m_tileSize.y);
+            if(tileNumber == 5){ //goal
+                quad[0].color = sf::Color::Red;
+                quad[1].color = sf::Color::Red;
+                quad[2].color = sf::Color::Red;
+                quad[3].color = sf::Color::Red;
+            }
+            else {
+                quad[0].texCoords = sf::Vector2f(tu * m_tileSize.x, tv * m_tileSize.y);
+                quad[1].texCoords = sf::Vector2f((tu + 1) * m_tileSize.x, tv * m_tileSize.y);
+                quad[2].texCoords = sf::Vector2f((tu + 1) * m_tileSize.x, (tv + 1) * m_tileSize.y);
+                quad[3].texCoords = sf::Vector2f(tu * m_tileSize.x, (tv + 1) * m_tileSize.y);
+            }
         }
     }
     if(playerStartGreen(player,pos)){
