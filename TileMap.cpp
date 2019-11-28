@@ -4,12 +4,14 @@ width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];
     matXCasuale(matX,x,y,tiles);
     print(matX,x,y);
+    srand((unsigned)time(nullptr));
 }
 TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri, Player* player):
 width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];
     matXCasualeWithPercentage(matX,x,y,tiles,percentualeZeri);
     print(matX,x,y);
+    srand((unsigned)time(nullptr));
 }
 TileMap::~TileMap() {
     std::cout<<"delete matX and player"<<std::endl;
@@ -17,7 +19,6 @@ TileMap::~TileMap() {
     delete player;
 }
 void TileMap::matXCasuale(int* matX, int x, int y, int n){
-    srand((unsigned)time(nullptr));
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
             matX[i + j * x] = genRandomNumber(n);
@@ -26,7 +27,6 @@ void TileMap::matXCasuale(int* matX, int x, int y, int n){
     //print(matX,x,y);
 }
 void TileMap::matXCasualeWithPercentage(int* matX, int x, int y, int n, int percentage){
-    srand((unsigned)time(nullptr));
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
             matX[i + j * x] = genRandomNumberWithPercentage(n,percentage);
@@ -34,12 +34,12 @@ void TileMap::matXCasualeWithPercentage(int* matX, int x, int y, int n, int perc
     }
     //print(matX,x,y);
 }
-void TileMap::generateGoal() {
+void TileMap::generateGoal(sf::Vector2i pos) {
     int goalx, goaly;
     do {
         goalx = genRandomNumber(width);
         goaly = genRandomNumber(height);
-    } while (goalx != player->getPos().x && goaly != player->getPos().y);
+    } while (goalx == pos.x && goaly == pos.y);
     std::cout << "trovato un goal possibile in: "<<goalx<<" "<<goaly << std::endl;
     matX[goalx + width * goaly] = 5; //5 è il goal
     goal = sf::Vector2i(goalx,goaly);
@@ -51,7 +51,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
         return false;
     }
 
-    generateGoal();
+    generateGoal(pos);
 
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4 ); //ogni elemento della matX ha 4 punti
@@ -85,7 +85,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
         }
     }
     if(playerStartGreen(pos)){
-        std::cout<<"player correttamente allocato"<< std::endl;
+        std::cout<<"player correttamente allocato in "<< pos.x << " "<< pos.y << std::endl;
         return true;
     }
     std::cout<<"la posizione del personaggio è fuori dal tileset"<<std::endl;
@@ -140,7 +140,7 @@ int TileMap::genRandomNumberWithPercentage(int n, int percentage){
 }
 bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
     sf::Vector2i pos = this->player->getPos();
-    std::cout<<"pos player: "<< pos.x <<" " <<pos.y<< std::endl;
+    std::cout<<"pos player from: "<< pos.x <<" " <<pos.y<< std::endl;
     switch(direction){
         case 'u':
             if(matX[pos.x + (pos.y - 1)* width] != 0 || pos.y == 0){
@@ -173,7 +173,7 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
             }
             break;
         case 'r':
-            if(matX[(pos.x + 1) + pos.y * width] != 0  || pos.y == width - 1 ) {
+            if(matX[(pos.x + 1) + pos.y * width] != 0  || pos.x == width - 1 ) {
                 if(matX[(pos.x + 1) + pos.y * width] == 5) {
                     std::cout << "ma quello è il goal!" << std::endl;
                 } else {
@@ -192,4 +192,13 @@ sf::Vector2i TileMap::getGoal(){
 }
 sf::Vector2i TileMap::getPosPlayer(){
     return player->getPos();
+}
+int TileMap::getValueAt(int matx){
+    return matX[matx];
+}
+int TileMap::getWidth(){
+    return width;
+}
+int TileMap::getHeigth(){
+    return height;
 }

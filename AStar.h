@@ -3,6 +3,10 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <vector>
+#include <set>
+#include <map>
+#include <iterator>
 #include "TileMap.h"
 
 class AStar {
@@ -15,17 +19,27 @@ class AStar {
 public:
     AStar(TileMap* tilemap, sf::Vector2i goal);
     //getSolution()
-
+    void astar();
 private:
-    int h_heuristic();
-    int g_distance();
-    int f_heuristic();
-    //bool aStar();
+    int h_heuristic(sf::Vector2i pos);
+    int h_heuristic(int pos);
+    int g_distance(sf::Vector2i pos);
+    int f_heuristic(sf::Vector2i pos);
+    int f_heuristic(int pos);
+    std::set<int> checkChildren(sf::Vector2i pos);
+    std::set<int> checkChildren(int pos);
+    int getTheMinorFfromChildren(std::set<int> children);
+    //bool aStar&();
     //store solution
+
     TileMap* tilemap;
+    int width;
+    int heigth;
     sf::Vector2i goal;
     sf::Vector2i posInit;
     sf::Vector2i posPlayer;
+
+
 };
 
 

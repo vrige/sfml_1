@@ -49,14 +49,14 @@ sf::Sprite Player::getSprite(){
 sf::Vector2i Player::getPos(){
     return this->pos;
 }
-void Player::setPos(sf::Vector2i pos){
-    this->pos = pos;
+void Player::setPos(sf::Vector2i poss){
+    this->pos = poss;
 }
 void Player::setPos(int x, int y){
     this->pos = sf::Vector2i(x,y);
 }
-void Player::setPosizione(sf::Vector2f pos){
-    m_sprite.setPosition(pos);
+void Player::setPosizione(sf::Vector2f poss){
+    m_sprite.setPosition(poss);
 }
 void Player::setPosizione(float x, float y){
     m_sprite.setPosition(x,y);
@@ -64,6 +64,6 @@ void Player::setPosizione(float x, float y){
 bool Player::getIsMoved(){
     return isMoved;
 }
-void Player::setIsMoved(bool isMoved){
-    this->isMoved = isMoved;
+void Player::setIsMoved(bool isMovedd){
+    this->isMoved = isMovedd;
 }

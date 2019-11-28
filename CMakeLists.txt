@@ -12,5 +12,5 @@ set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR "D:/Libraries/SFML-2.5.1/lib/cmake/SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
-add_executable(sfml_1 main.cpp TileMap.cpp TileMap.h Player.cpp Player.h)
+add_executable(sfml_1 main.cpp TileMap.cpp TileMap.h Player.cpp Player.h AStar.cpp AStar.h)
 target_link_libraries(sfml_1 sfml-graphics sfml-window sfml-system)

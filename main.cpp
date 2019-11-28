@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "AStar.h"
 
+
 using namespace std;
 
 int main()
@@ -31,6 +32,7 @@ int main()
     }
 
     AStar aStar(&map, map.getGoal());
+    aStar.astar();
 
     sf::View view1(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
     view1.setSize(736.f, 736.f);
@@ -89,14 +91,14 @@ int main()
                     }
                     else if (event.key.code == sf::Keyboard::A)
                     {
+                        cout<<"tasto A"<<endl;
                         if(!player.getIsMoved()){
-                            player.setPos(posInitPlayer);
+  /*                          player.setPos(posInitPlayer);
                             sf::Vector2f posIniz(posInitPlayer.x * tileSize.x,posInitPlayer.y * tileSize.y);
                             player.setPosition(posIniz);
-                            view1.setCenter(posIniz);
+                            view1.setCenter(posIniz);*/
+                            aStar.astar();
                         }
-
-                        cout<<"tasto A"<<endl;
                     }
                     break;
                 case sf::Event::KeyReleased:

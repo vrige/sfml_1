@@ -24,6 +24,9 @@ public:
 
     sf::Vector2i getGoal();
     sf::Vector2i getPosPlayer();
+    int getValueAt(int matx);
+    int getWidth();
+    int getHeigth();
 
     template <class myType>
         static void print(const myType* matX,const int x, const int y){
@@ -44,7 +47,7 @@ public:
             std::cout<<std::endl;
         }
 private:
-    void generateGoal();
+    void generateGoal(sf::Vector2i pos);
     bool playerStartGreen(sf::Vector2i pos);
     static int genRandomNumber(int n);
     static int genRandomNumberWithPercentage(int n, int percentage);
