@@ -15,7 +15,7 @@ int main()
     int x = 20;
     int y = 20;
     int tiles = 4;
-    int percentageOfZeros = 85;
+    int percentageOfZeros = 45;
     float speedView = 30;
     string tileSet = "C:/Users/cristina/CLionProjects/sfml_1/img/tileset.png";
     string tileSetForPlayer = "C:/Users/cristina/CLionProjects/sfml_1/img/game34x34.png";
@@ -32,7 +32,7 @@ int main()
     }
 
     AStar aStar(&map, map.getGoal());
-    aStar.astar();
+   // aStar.astar();
 
     sf::View view1(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
     view1.setSize(736.f, 736.f);
@@ -97,7 +97,9 @@ int main()
                             sf::Vector2f posIniz(posInitPlayer.x * tileSize.x,posInitPlayer.y * tileSize.y);
                             player.setPosition(posIniz);
                             view1.setCenter(posIniz);*/
-                            aStar.astar();
+                            if(aStar.astar()){
+                                vector<int> path = aStar.getPath();
+                            }
                         }
                     }
                     break;

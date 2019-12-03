@@ -37,14 +37,16 @@ int AStar::f_heuristic(int pos){
     //std::cout<<"pos f_: " << pos/width << " " << pos%width << std::endl;
     return f_heuristic(posVec);
 }
-void AStar::astar() {
-    std::vector<char> direzioni;
-
+bool AStar::astar() {
     std::set<int> openList;
-    std::set<int> closeList;
+
+    std::unordered_map<int, double> cost_so_far;
+    std::unordered_map<int, int> came_from;
 
     int start = tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width;
     openList.insert(start);
+    cost_so_far[start] = 0;
+    came_from[start] = start;
 
     int current = -1;
 
@@ -59,31 +61,24 @@ void AStar::astar() {
             std::set<int> children = checkChildren(current);
             for(int child : children){
                 int cost = g_distance(child) + 1;
-                if(openList.find(child) != openList.end()) {
-                    if (g_distance(child) <= cost) {
 
-                    }
-                    continue;
-                }else if(closeList.find(child) != closeList.end()){
-                    if(g_distance(child) <= cost){
-                        closeList.erase(child);
-                        openList.insert(child);
-                    }
-                    continue;
-                }else {
+                if (cost_so_far.find(child) == cost_so_far.end()
+                    || cost < cost_so_far[child]) {
+                    cost_so_far[child] = cost;
                     openList.insert(child);
+                    came_from[child] = current;
                 }
             }
-
         }
-        closeList.insert(current);
     }
-    if(current == goal.x + goal.y * width){
+    if(current == goal.x + goal.y * width && !path.empty()){
+        path = reconstruct_path(came_from);
         std::cout<<"sei contento di aver trovato il goal?!" << std::endl;
+        return true;
+    }else{
+        std::cout<<"goal non trovato!" << std::endl;
+        return false;
     }
-
-
-
     //o decido di usare sempre i nodi per queste funzioni oppure utilizzo la posizione che hanno nella matrice
     //non ho bisogno della classe nodo perchè:
     //- i figli posso vederli dalla matrice
@@ -146,4 +141,19 @@ int AStar::getTheMinorFfromSet(std::set<int> set){
         std::cout<<"il set fornito è vuoto!"<<std::endl;
         return -1;
     }
+}
+std::vector<int> AStar::reconstruct_path(std::unordered_map<int, int> came_from){
+    std::vector<int> path;
+    int current = goal.x + goal.y*width;
+    int start = posInit.x + posInit.y * width;
+    while (current != start) {
+        path.push_back(current);
+        current = came_from[current];
+    }
+    path.push_back(start); // optional
+    std::reverse(path.begin(), path.end());
+    return path;
+}
+std::vector<int> AStar::getPath(){
+    return path;
 }
