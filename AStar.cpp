@@ -71,8 +71,9 @@ bool AStar::astar() {
             }
         }
     }
-    if(current == goal.x + goal.y * width && !path.empty()){
+    if(current == goal.x + goal.y * width){
         path = reconstruct_path(came_from);
+        easierToReadPath = reconstruct_EasierToReadPath();
         std::cout<<"sei contento di aver trovato il goal?!" << std::endl;
         return true;
     }else{
@@ -143,17 +144,43 @@ int AStar::getTheMinorFfromSet(std::set<int> set){
     }
 }
 std::vector<int> AStar::reconstruct_path(std::unordered_map<int, int> came_from){
-    std::vector<int> path;
+    std::vector<int> pathh;
     int current = goal.x + goal.y*width;
     int start = posInit.x + posInit.y * width;
     while (current != start) {
-        path.push_back(current);
+        pathh.push_back(current);
         current = came_from[current];
     }
-    path.push_back(start); // optional
-    std::reverse(path.begin(), path.end());
-    return path;
+    pathh.push_back(start); // optional
+    std::reverse(pathh.begin(), pathh.end());
+    return pathh;
+}
+std::vector<char> AStar::reconstruct_EasierToReadPath(){
+    std::vector<char> dir;
+    for(std::vector<int>::iterator it = path.begin() ; it != (path.end() - 1) ; ++it){
+
+        int direction = *it - *(it + 1);
+
+        if(direction == 1) {//left
+            dir.push_back('l');
+        }
+        else if(direction == -1) { //rigth
+            dir.push_back('r');
+        }
+        else if(direction == width){ //up
+            dir.push_back('u');
+        }
+        else if(direction == -width){ //down
+            dir.push_back('d');
+        }else{
+            std::cout<<"problemi nel geteasierToReadPath"<<std::endl;
+        }
+    }
+    return dir;
 }
 std::vector<int> AStar::getPath(){
     return path;
+}
+std::vector<char> AStar::getEasierToReadPath(){
+    return easierToReadPath;
 }

@@ -16,10 +16,10 @@ class AStar {
 
 public:
     AStar(TileMap* tilemap, sf::Vector2i goal);
-    //getSolution()
     bool astar();
     void provaEuristiche();
     std::vector<int> getPath();
+    std::vector<char> getEasierToReadPath();
 private:
     int h_heuristic(sf::Vector2i pos);
     int h_heuristic(int pos);
@@ -31,8 +31,8 @@ private:
     std::set<int> checkChildren(int pos);
     int getTheMinorFfromSet(std::set<int> set);
     std::vector<int> reconstruct_path(std::unordered_map<int, int> came_from);
-    //bool aStar();
-    //store solution
+    std::vector<char> reconstruct_EasierToReadPath();
+
 
     TileMap* tilemap;
     int width;
@@ -41,6 +41,7 @@ private:
     sf::Vector2i posInit;
     sf::Vector2i posPlayer;
     std::vector<int> path;
+    std::vector<char> easierToReadPath;
 };
 
 

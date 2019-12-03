@@ -15,7 +15,7 @@ int main()
     int x = 20;
     int y = 20;
     int tiles = 4;
-    int percentageOfZeros = 45;
+    int percentageOfZeros = 75;
     float speedView = 30;
     string tileSet = "C:/Users/cristina/CLionProjects/sfml_1/img/tileset.png";
     string tileSetForPlayer = "C:/Users/cristina/CLionProjects/sfml_1/img/game34x34.png";
@@ -98,7 +98,12 @@ int main()
                             player.setPosition(posIniz);
                             view1.setCenter(posIniz);*/
                             if(aStar.astar()){
-                                vector<int> path = aStar.getPath();
+                                vector<char> path = aStar.getEasierToReadPath();
+                                cout<<"il path è: "<< endl;
+                                for(char iter : path){
+                                    player.movePlayer(iter);
+
+                                }
                             }
                         }
                     }
