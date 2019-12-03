@@ -24,6 +24,11 @@ int AStar::g_distance(sf::Vector2i pos){
     int sx = abs(pos.y - posInit.y);
     return dx + sx;
 }
+int AStar::g_distance(int pos){
+    int dx = abs(pos%width - posInit.x);
+    int sx = abs(pos/width - posInit.y);
+    return dx + sx;
+}
 int AStar::f_heuristic(sf::Vector2i pos){
     return g_distance(pos) + h_heuristic(pos);
 }
@@ -35,13 +40,49 @@ int AStar::f_heuristic(int pos){
 void AStar::astar() {
     std::vector<char> direzioni;
 
-/*    std::set<Node> openList;
-    std::set<Node> closeList;*/
-    std::set<int> children = checkChildren(tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width);
-    int min = getTheMinorFfromChildren(children);
-    if(min != -1){
+    std::set<int> openList;
+    std::set<int> closeList;
 
+    int start = tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width;
+    openList.insert(start);
+
+    int current = -1;
+
+    while(!openList.empty()){
+        current = getTheMinorFfromSet(openList);
+        openList.erase(current);
+
+        if(h_heuristic(current) == 0) { //è il goal!
+            std::cout << "goal trovato!" << std::endl;
+            break;
+        }else{
+            std::set<int> children = checkChildren(current);
+            for(int child : children){
+                int cost = g_distance(child) + 1;
+                if(openList.find(child) != openList.end()) {
+                    if (g_distance(child) <= cost) {
+
+                    }
+                    continue;
+                }else if(closeList.find(child) != closeList.end()){
+                    if(g_distance(child) <= cost){
+                        closeList.erase(child);
+                        openList.insert(child);
+                    }
+                    continue;
+                }else {
+                    openList.insert(child);
+                }
+            }
+
+        }
+        closeList.insert(current);
     }
+    if(current == goal.x + goal.y * width){
+        std::cout<<"sei contento di aver trovato il goal?!" << std::endl;
+    }
+
+
 
     //o decido di usare sempre i nodi per queste funzioni oppure utilizzo la posizione che hanno nella matrice
     //non ho bisogno della classe nodo perchè:
@@ -50,6 +91,21 @@ void AStar::astar() {
     //- le direzioni le salvo come char su un vector
     //- in openlist e clsoelist ci inserisco i valori di pos della matrice
 
+
+    // a star deve tenere il segno di dove si dovrebbe spostare il personaggio
+}
+void  AStar::provaEuristiche(){
+    int pos = tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width;
+    std::cout<<"posizione attuale "<<tilemap->getPosPlayer().x <<" " <<tilemap->getPosPlayer().y;
+    std::cout<<"  g: "<<g_distance(pos);
+    std::cout<<",  h: "<<h_heuristic(pos);
+    std::cout<<",  f: "<<f_heuristic(pos)<<std::endl;
+
+    std::set<int> children = checkChildren(pos);
+    for(int child : children){
+        std::cout<<"figlio "<<child<<" in pos: "<< child << ", g: "<< g_distance(child) << ", h: " << h_heuristic(child);
+        std::cout<<", f: "<< f_heuristic(child)<< std::endl;
+    }
 }
 std::set<int> AStar::checkChildren(sf::Vector2i pos){
     checkChildren(pos.x + pos.y * width);
@@ -57,33 +113,35 @@ std::set<int> AStar::checkChildren(sf::Vector2i pos){
 std::set<int> AStar::checkChildren(int pos){
     std::set<int> children;
     if(tilemap->getValueAt(pos + 1) == 0 || tilemap->getValueAt(pos + 1) == 5){ //right
-        std::cout<<"dx libera"<<std::endl;
+       // std::cout<<"dx libera"<<std::endl;
         children.insert(pos + 1);
     }
     if(tilemap->getValueAt(pos - 1) == 0 || tilemap->getValueAt(pos - 1) == 5) { //left
-        std::cout<<"sx libera"<<std::endl;
+      //  std::cout<<"sx libera"<<std::endl;
         children.insert(pos - 1);
     }
     if(tilemap->getValueAt(pos + width) == 0 || tilemap->getValueAt(pos + width) == 5) { //down
-        std::cout<<"dw libera"<<std::endl;
+       // std::cout<<"dw libera"<<std::endl;
         children.insert(pos + width);
     }
-    if((tilemap->getValueAt(pos - width) == 0 && tilemap->checkGridPossibileMove('u'))|| tilemap->getValueAt(pos - width) == 5) { //up
-        std::cout<<"up libera"<<std::endl;
+    if(tilemap->getValueAt(pos - width) == 0 || tilemap->getValueAt(pos - width) == 5) { //up
+        //std::cout<<"up libera"<<std::endl;
         children.insert(pos - width);
     }
     return children;
 }
-int AStar::getTheMinorFfromChildren(std::set<int> children){
-    if(!children.empty()){
+int AStar::getTheMinorFfromSet(std::set<int> set){
+    if(!set.empty()){
         int min = 100000;
-        for(int iter : children){
-            std::cout<<"pos: "<<iter<<" value of f: " << h_heuristic(iter)<<std::endl;
-            if(h_heuristic(iter) < min){
-                min = h_heuristic(iter);
+        int minEle = -1;
+        for(int iter : set){
+            std::cout<<"pos: "<<iter<<" value of f: " << f_heuristic(iter)<<std::endl;
+            if(f_heuristic(iter) < min){
+                min = f_heuristic(iter);
+                minEle = iter;
             }
         }
-        return min;
+        return minEle;
     }else{
         std::cout<<"il set fornito è vuoto!"<<std::endl;
         return -1;
