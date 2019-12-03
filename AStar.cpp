@@ -38,6 +38,7 @@ int AStar::f_heuristic(int pos){
     return f_heuristic(posVec);
 }
 bool AStar::astar() {
+    posInit = tilemap->getPosPlayer();
     std::set<int> openList;
 
     std::unordered_map<int, double> cost_so_far;
@@ -72,6 +73,7 @@ bool AStar::astar() {
         }
     }
     if(current == goal.x + goal.y * width){
+        std::cout<<"goal trovato! Ora calcoliamo il path" << std::endl;
         path = reconstruct_path(came_from);
         easierToReadPath = reconstruct_EasierToReadPath();
         std::cout<<"sei contento di aver trovato il goal?!" << std::endl;
@@ -153,6 +155,7 @@ std::vector<int> AStar::reconstruct_path(std::unordered_map<int, int> came_from)
     }
     pathh.push_back(start); // optional
     std::reverse(pathh.begin(), pathh.end());
+    std::cout<<"reostruct_path"<<std::endl;
     return pathh;
 }
 std::vector<char> AStar::reconstruct_EasierToReadPath(){
@@ -176,6 +179,7 @@ std::vector<char> AStar::reconstruct_EasierToReadPath(){
             std::cout<<"problemi nel geteasierToReadPath"<<std::endl;
         }
     }
+    std::cout<<"reostruct_EasierToReadPath"<<std::endl;
     return dir;
 }
 std::vector<int> AStar::getPath(){
