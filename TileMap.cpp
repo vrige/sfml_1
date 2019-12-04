@@ -1,4 +1,5 @@
 #include "TileMap.h"
+
 TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player):
 width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];

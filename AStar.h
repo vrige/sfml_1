@@ -16,8 +16,9 @@ class AStar {
 
 public:
     AStar(TileMap* tilemap, sf::Vector2i goal);
+    virtual ~AStar();
     bool astar();
-    void provaEuristiche();
+    void testHeuristics();
     std::vector<int> getPath();
     std::vector<char> getEasierToReadPath();
 private:

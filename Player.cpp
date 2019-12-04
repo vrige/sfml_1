@@ -22,22 +22,18 @@ void Player::movePlayer(char direction){
         case 'u':
             setPos(x, y - 1);
             setPosizione(xf * playerSize.x, (yf - 1)* playerSize.y);
-            //   m_sprite.move(0,-speedMoviment);
             break;
         case 'd':
             setPos(x, y + 1);
             setPosizione(xf * playerSize.x, (yf + 1)* playerSize.y);
-            // m_sprite.move(0,speedMoviment);
             break;
         case 'l':
             setPos(x - 1, y);
             setPosizione((xf - 1)* playerSize.x, yf* playerSize.y);
-            // m_sprite.move(-speedMoviment,0);
             break;
         case 'r':
             setPos(x + 1,y);
             setPosizione((xf + 1)* playerSize.x,yf* playerSize.y);
-            // m_sprite.move(speedMoviment,0);
             break;
         default:
             std::cout<<"problemi nella scelta della direzione"<<std::endl;
@@ -66,4 +62,7 @@ bool Player::getIsMoved(){
 }
 void Player::setIsMoved(bool isMovedd){
     this->isMoved = isMovedd;
+}
+sf::Vector2u Player::getPlayerSize(){
+    return playerSize;
 }

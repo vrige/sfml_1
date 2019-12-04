@@ -1,7 +1,5 @@
-
 #ifndef SFML_1_PLAYER_H
 #define SFML_1_PLAYER_H
-
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -19,6 +17,8 @@ public:
     void setPosizione(float x, float y);
     bool getIsMoved();
     void setIsMoved(bool isMoved);
+    sf::Vector2u getPlayerSize();
+
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
     {

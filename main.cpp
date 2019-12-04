@@ -35,10 +35,9 @@ int main()
     }
 
     AStar aStar(&map, map.getGoal());
-   // aStar.astar();
 
-    sf::View view1(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
-    view1.setSize(736.f, 736.f);
+    sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
+    view.setSize(736.f, 736.f);
 
 
     while (window.isOpen())
@@ -65,7 +64,7 @@ int main()
                         cout << "up" << endl;
                         if(map.checkGridPossibileMove('u') && !player.getIsMoved()){
                             player.movePlayer('u');
-                            view1.move(0, -speedView);
+                            view.move(0, -speedView);
                         }
                     }
                     else if(event.key.code == sf::Keyboard::Down)
@@ -73,7 +72,7 @@ int main()
                         cout << "down" << endl;
                         if(map.checkGridPossibileMove('d') && !player.getIsMoved()){
                             player.movePlayer('d');
-                            view1.move(0, speedView);
+                            view.move(0, speedView);
                         }
                     }
                     else if(event.key.code == sf::Keyboard::Left)
@@ -81,7 +80,7 @@ int main()
                         cout << "left" << endl;
                         if(map.checkGridPossibileMove('l') && !player.getIsMoved()){
                             player.movePlayer('l');
-                            view1.move(-speedView, 0);
+                            view.move(-speedView, 0);
                         }
                     }
                     else if(event.key.code == sf::Keyboard::Right)
@@ -89,7 +88,7 @@ int main()
                         cout << "right" << endl;
                         if(map.checkGridPossibileMove('r') && !player.getIsMoved()){
                             player.movePlayer('r');
-                            view1.move(speedView, 0);
+                            view.move(speedView, 0);
                         }
                     }
                     else if (event.key.code == sf::Keyboard::A) {
@@ -103,31 +102,36 @@ int main()
                                 for (char iter : path) {
                                     player.movePlayer(iter);
 
-                                    this_thread::sleep_for(timespan);
+                                  //  this_thread::sleep_for(timespan);
                                     player.setIsMoved(false);
                                 }
+                                view.setCenter(player.getPos().x * player.getPlayerSize().x, player.getPos().y * player.getPlayerSize().y);
                             }
                         }
+                    }
+                    else if (event.key.code == sf::Keyboard::S) {
+                        cout << "tasto S" << endl;
+                        view.setCenter(player.getPos().x * player.getPlayerSize().x, player.getPos().y * player.getPlayerSize().y);
                     }
                     else if(event.key.code == sf::Keyboard::K)
                     {
                         cout << "move view down" << endl;
-                        view1.move(0, speedView);
+                        view.move(0, speedView);
                     }
                     else if(event.key.code == sf::Keyboard::J)
                     {
                         cout << "move view left" << endl;
-                        view1.move(-speedView, 0);
+                        view.move(-speedView, 0);
                     }
                     else if(event.key.code == sf::Keyboard::I)
                     {
                         cout << "move view up" << endl;
-                        view1.move(0, -speedView);
+                        view.move(0, -speedView);
                     }
                     else if(event.key.code == sf::Keyboard::L)
                     {
                         cout << "move view rigth" << endl;
-                        view1.move(speedView, 0);
+                        view.move(speedView, 0);
                     }
                     break;
                  case sf::Event::KeyReleased:
@@ -155,15 +159,15 @@ int main()
              }
          }
          if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
-             view1.zoom(0.99f);
+             view.zoom(0.99f);
              cout<<"zoom in"<< endl;
          }
          if(sf::Keyboard::isKeyPressed(sf::Keyboard::X)){
-             view1.zoom(1.01f);
+             view.zoom(1.01f);
              cout<<"zoom out"<< endl;
          }
 
-         window.setView(view1);
+         window.setView(view);
          window.clear(sf::Color::White);
          window.draw(map);
          window.draw(player);

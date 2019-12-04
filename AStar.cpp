@@ -7,6 +7,10 @@ AStar::AStar(TileMap* tilemap, sf::Vector2i goal ): tilemap(tilemap), goal(goal)
     posPlayer = tilemap->getPosPlayer();
     std::cout << "creazione di Astar" << std::endl;
 }
+AStar::~AStar(){
+    std::cout<<"delete tilemap"<<std::endl;
+    delete tilemap;
+}
 int AStar::h_heuristic(sf::Vector2i pos){  //manhattan heuristic
     int dx = abs(pos.x - goal.x);
     int dy = abs(pos.y - goal.y);
@@ -82,17 +86,8 @@ bool AStar::astar() {
         std::cout<<"goal non trovato!" << std::endl;
         return false;
     }
-    //o decido di usare sempre i nodi per queste funzioni oppure utilizzo la posizione che hanno nella matrice
-    //non ho bisogno della classe nodo perchè:
-    //- i figli posso vederli dalla matrice
-    //- f dei nodi non cambia quindi posso mapparlo
-    //- le direzioni le salvo come char su un vector
-    //- in openlist e clsoelist ci inserisco i valori di pos della matrice
-
-
-    // a star deve tenere il segno di dove si dovrebbe spostare il personaggio
 }
-void  AStar::provaEuristiche(){
+void AStar::testHeuristics(){
     int pos = tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width;
     std::cout<<"posizione attuale "<<tilemap->getPosPlayer().x <<" " <<tilemap->getPosPlayer().y;
     std::cout<<"  g: "<<g_distance(pos);
