@@ -3,14 +3,20 @@
 TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player):
 width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];
+    srand((unsigned)time(nullptr));
     matXCasuale(matX,x,y,tiles);
     print(matX,x,y);
-    srand((unsigned)time(nullptr));
 }
 TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri, Player* player):
 width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
     this->matX = new int[x*y];
+    srand((unsigned)time(nullptr));
     matXCasualeWithPercentage(matX,x,y,tiles,percentualeZeri);
+    print(matX,x,y);
+}
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, int* matX):
+        width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
+    this->matX = matX;
     print(matX,x,y);
     srand((unsigned)time(nullptr));
 }

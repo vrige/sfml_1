@@ -13,6 +13,7 @@ public:
 
     TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player);
     TileMap( int x, int y, int tiles,sf::Vector2u tileSize, int percentualeZeri, Player* player);
+    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, int* matX);
 
     virtual ~TileMap();
 

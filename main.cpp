@@ -1,7 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <chrono>
-#include <thread>
 #include "TileMap.h"
 #include "Player.h"
 #include "AStar.h"
@@ -19,7 +17,6 @@ int main()
     int tiles = 4;
     int percentageOfZeros = 75;
     float speedView = 30;
-    chrono::milliseconds timespan(500);
     string tileSet = "C:/Users/cristina/CLionProjects/sfml_1/img/tileset.png";
     string tileSetForPlayer = "C:/Users/cristina/CLionProjects/sfml_1/img/game34x34.png";
     sf::Vector2u tileSize(32, 32);
@@ -29,12 +26,13 @@ int main()
     Player player(tileSetForPlayer,tileSize);
     TileMap map(x,y,tiles,tileSize,percentageOfZeros,&player);
 
+
     if (!map.load(tileSet,posInitPlayer)){
         cout<<"problemi nel rendering della mappa"<<endl;
         return -1;
     }
-
     AStar aStar(&map, map.getGoal());
+
 
     sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
     view.setSize(736.f, 736.f);
@@ -98,16 +96,40 @@ int main()
 
                             if (aStar.astar()) {
                                 vector<char> path = aStar.getEasierToReadPath();
-                               // cout << "il path è: " << endl;
-                                for (char iter : path) {
-                                    player.movePlayer(iter);
 
-                                  //  this_thread::sleep_for(timespan);
-                                    player.setIsMoved(false);
+                                sf::Clock clock;
+                                sf::Time timeSinceLastUpdate = sf::Time::Zero;
+                                float frametime = 1.0f / 6.0f; //è un immagine al secondo
+                                sf::Time frameTime = sf::seconds(frametime);
+
+                                for (char iter : path) {
+                                    while(true){
+                                        sf::Time elapsedTime = clock.restart();
+                                        timeSinceLastUpdate += elapsedTime;
+
+                                        if (timeSinceLastUpdate > frameTime){
+
+                                            timeSinceLastUpdate -= frameTime;
+                                            player.movePlayer(iter);
+                                            view.setCenter(player.getPos().x * player.getPlayerSize().x, player.getPos().y * player.getPlayerSize().y);
+                                            player.setIsMoved(false);
+
+                                            window.setView(view);
+                                            window.clear(sf::Color::White);
+                                            window.draw(map);
+                                            window.draw(player);
+                                            window.display();
+
+                                            break;
+                                        }
+                                    }
                                 }
-                                view.setCenter(player.getPos().x * player.getPlayerSize().x, player.getPos().y * player.getPlayerSize().y);
                             }
                         }
+                    }
+                    else if (event.key.code == sf::Keyboard::T) {
+                        cout << "tasto T" << endl;
+                        //TEST
                     }
                     else if (event.key.code == sf::Keyboard::S) {
                         cout << "tasto S" << endl;
