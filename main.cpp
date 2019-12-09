@@ -15,10 +15,10 @@ int main()
     int x = 20;
     int y = 20;
     int tiles = 4;
-    int percentageOfZeros = 75;
+    int percentageOfZeros = 25;
     float speedView = 30;
-    string tileSet = "C:/Users/cristina/CLionProjects/sfml_1/img/tileset.png";
-    string tileSetForPlayer = "C:/Users/cristina/CLionProjects/sfml_1/img/game34x34.png";
+    string tileSet ="./img/tileset.png";
+    string tileSetForPlayer = "./img/game34x34.png";
     sf::Vector2u tileSize(32, 32);
     sf::Vector2i posInitPlayer(10,10);
 
