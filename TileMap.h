@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 #include <set>
+#include <memory>
 #include "Player.h"
 
 class TileMap  : public sf::ConvexShape{
@@ -13,12 +14,13 @@ public:
 
     TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player);
     TileMap( int x, int y, int tiles,sf::Vector2u tileSize, int percentualeZeri, Player* player);
-    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, int* matX);
+    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, std::unique_ptr<int[]>& matX);
 
     virtual ~TileMap();
 
-    static void matXCasuale(int* matX, int x, int y, int n);
-    static void matXCasualeWithPercentage(int* matX, int x, int y, int n, int percentage);
+    static void matXCasuale(std::unique_ptr<int[]>& matX, int x, int y, int n);
+    static void matXCasualeWithPercentage(std::unique_ptr<int[]>& matX, int x, int y, int n, int percentage);
+    static void print(std::unique_ptr<int[]>& matX, int x, int y);
 
     bool load(const std::string& tileset, sf::Vector2i pos);
     bool checkGridPossibileMove(char direction);
@@ -29,24 +31,6 @@ public:
     int getWidth();
     int getHeigth();
 
-    template <class myType>
-        static void print(const myType* matX,const int x, const int y){
-            std::string a = "";
-            for(int j = 0; j < y; j++){
-                for(int i = 0; i < x; i++){
-                    if(typeid(int) == typeid(myType)){
-                        a += std::to_string(matX[i + j * x]) + " ";
-                    }
-                    else if(typeid(char) == typeid(myType)){
-                        a += matX[i + j * x];
-                        a += " ";
-                    }
-                }
-                std::cout<< a <<std::endl;
-                a = "";
-            }
-            std::cout<<std::endl;
-        }
 private:
     void generateGoal(sf::Vector2i pos);
     bool playerStartGreen(sf::Vector2i pos);
@@ -54,7 +38,7 @@ private:
     static int genRandomNumberWithPercentage(int n, int percentage);
 
     int width,height;
-    int* matX;
+    std::unique_ptr<int[]> matX;
     int tiles;
     sf::VertexArray m_vertices;
     sf::Texture m_tileset;

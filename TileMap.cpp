@@ -2,44 +2,52 @@
 
 TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player):
 width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
-    this->matX = new int[x*y];
+    std::unique_ptr<int[]> p1( std::make_unique<int[]>(x*y) );
+    matX = std::move(p1);
     srand((unsigned)time(nullptr));
     matXCasuale(matX,x,y,tiles);
     print(matX,x,y);
 }
 TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri, Player* player):
 width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
-    this->matX = new int[x*y];
+    std::unique_ptr<int[]> p1( std::make_unique<int[]>(x*y) );
+    matX = std::move(p1);
     srand((unsigned)time(nullptr));
     matXCasualeWithPercentage(matX,x,y,tiles,percentualeZeri);
     print(matX,x,y);
 }
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, int* matX):
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, std::unique_ptr<int[]>& matX):
         width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
-    this->matX = matX;
+    matX = std::move(matX);
     print(matX,x,y);
     srand((unsigned)time(nullptr));
 }
 TileMap::~TileMap() {
-    std::cout<<"delete matX and player"<<std::endl;
-    delete matX;
-    delete player;
 }
-void TileMap::matXCasuale(int* matX, int x, int y, int n){
+void TileMap::matXCasuale(std::unique_ptr<int[]>& matX, int x, int y, int n){
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
             matX[i + j * x] = genRandomNumber(n);
         }
     }
-    //print(matX,x,y);
 }
-void TileMap::matXCasualeWithPercentage(int* matX, int x, int y, int n, int percentage){
+void TileMap::matXCasualeWithPercentage(std::unique_ptr<int[]>& matX, int x, int y, int n, int percentage){
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
             matX[i + j * x] = genRandomNumberWithPercentage(n,percentage);
         }
     }
-    //print(matX,x,y);
+}
+void TileMap::print( std::unique_ptr<int[]>& matX,int x, int y){
+    std::string a;
+    for(int j = 0; j < y; j++){
+        for(int i = 0; i < x; i++){
+            a += std::to_string(matX[i + j * x]) + " ";
+        }
+        std::cout<< a <<std::endl;
+        a = "";
+    }
+    std::cout<<std::endl;
 }
 void TileMap::generateGoal(sf::Vector2i pos) {
     int goalx, goaly;
@@ -147,7 +155,7 @@ int TileMap::genRandomNumberWithPercentage(int n, int percentage){
 }
 bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
     sf::Vector2i pos = this->player->getPos();
-    std::cout<<"pos player from: "<< pos.x <<" " <<pos.y<< std::endl;
+   // std::cout<<"pos player from: "<< pos.x <<" " <<pos.y<< std::endl;
     switch(direction){
         case 'u':
             if(matX[pos.x + (pos.y - 1)* width] != 0 || pos.y == 0){
