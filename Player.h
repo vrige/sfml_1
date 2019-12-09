@@ -10,11 +10,11 @@ public:
     Player(const std::string& texture, sf::Vector2u playerSize);
     void movePlayer(char direction);
     sf::Sprite getSprite();
-    sf::Vector2i getPos();
-    void setPos(sf::Vector2i pos); //la posizione non è in pixel, ma è data dalla coppia i e j del tile
-    void setPos(int x, int y);
-    void setPosizione(sf::Vector2f pos); //cambia la posizione della sprite
-    void setPosizione(float x, float y);
+    sf::Vector2i getPosInMatrix();
+    void setPosInMatrix(sf::Vector2i pos); //la posizione non è in pixel, ma è data dalla coppia i e j del tile
+    void setPosInMatrix(int x, int y);
+    void setPosInSprite(sf::Vector2f pos); //cambia la posizione della sprite
+    void setPosInSprite(float x, float y);
     bool getIsMoved();
     void setIsMoved(bool isMoved);
     sf::Vector2u getPlayerSize();
@@ -27,7 +27,7 @@ private:
 
     sf::Sprite m_sprite;
     sf::Texture m_texture;
-    sf::Vector2i pos;
+    sf::Vector2i posPlayer;
     sf::Vector2u playerSize;
     bool isMoved;
 };

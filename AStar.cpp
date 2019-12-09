@@ -3,8 +3,8 @@
 AStar::AStar(TileMap* tilemap,  Player* player, sf::Vector2i goal ): tilemap(tilemap),player(player),goal(goal) {
     width = tilemap->getWidth();
     heigth = tilemap->getHeigth();
-    posInit = player->getPos();
-    posPlayer = player->getPos();
+    posInit = player->getPosInMatrix();
+    posPlayer = player->getPosInMatrix();
     std::cout << "creazione di Astar" << std::endl;
 }
 AStar::~AStar(){
@@ -42,14 +42,14 @@ int AStar::f_heuristic(int pos){
     //std::cout<<"pos f_: " << pos/width << " " << pos%width << std::endl;
     return f_heuristic(posVec);
 }
-bool AStar::astar() {
-    posInit = player->getPos();
+bool AStar::findPath() {
+    posInit = player->getPosInMatrix();
     std::set<int> openList;
 
     std::unordered_map<int, double> cost_so_far;
     std::unordered_map<int, int> came_from;
 
-    int start = player->getPos().x + player->getPos().y * width;
+    int start = player->getPosInMatrix().x + player->getPosInMatrix().y * width;
     openList.insert(start);
     cost_so_far[start] = 0;
     came_from[start] = start;
@@ -89,8 +89,8 @@ bool AStar::astar() {
     }
 }
 void AStar::testHeuristics(){
-    int pos = player->getPos().x +player->getPos().y * width;
-    std::cout<<"posizione attuale "<<player->getPos().x <<" " <<player->getPos().y;
+    int pos = player->getPosInMatrix().x +player->getPosInMatrix().y * width;
+    std::cout<<"posizione attuale "<<player->getPosInMatrix().x <<" " <<player->getPosInMatrix().y;
     std::cout<<"  g: "<<g_distance(pos);
     std::cout<<",  h: "<<h_heuristic(pos);
     std::cout<<",  f: "<<f_heuristic(pos)<<std::endl;

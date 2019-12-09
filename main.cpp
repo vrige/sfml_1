@@ -34,8 +34,8 @@ int main()
 
 
     posInitPlayer = map.makePlayerStartGreen(posInitPlayer);
-    player.setPos(posInitPlayer);
-    player.setPosizione(sf::Vector2f(posInitPlayer.x*tileSize.x,posInitPlayer.y*tileSize.y));
+    player.setPosInMatrix(posInitPlayer);
+    player.setPosInSprite(sf::Vector2f(posInitPlayer.x*tileSize.x,posInitPlayer.y*tileSize.y));
 
 
     AStar aStar(&map, &player, map.getGoal());
@@ -67,7 +67,7 @@ int main()
                     if(event.key.code == sf::Keyboard::Up)
                     {
                         cout << "up" << endl;
-                        if(map.checkGridPossibileMove('u', player.getPos()) && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('u', player.getPosInMatrix()) && !player.getIsMoved()){
                             player.movePlayer('u');
                             view.move(0, -speedView);
                         }
@@ -75,7 +75,7 @@ int main()
                     else if(event.key.code == sf::Keyboard::Down)
                     {
                         cout << "down" << endl;
-                        if(map.checkGridPossibileMove('d', player.getPos()) && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('d', player.getPosInMatrix()) && !player.getIsMoved()){
                             player.movePlayer('d');
                             view.move(0, speedView);
                         }
@@ -83,7 +83,7 @@ int main()
                     else if(event.key.code == sf::Keyboard::Left)
                     {
                         cout << "left" << endl;
-                        if(map.checkGridPossibileMove('l', player.getPos()) && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('l', player.getPosInMatrix()) && !player.getIsMoved()){
                             player.movePlayer('l');
                             view.move(-speedView, 0);
                         }
@@ -91,7 +91,7 @@ int main()
                     else if(event.key.code == sf::Keyboard::Right)
                     {
                         cout << "right" << endl;
-                        if(map.checkGridPossibileMove('r', player.getPos()) && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('r', player.getPosInMatrix()) && !player.getIsMoved()){
                             player.movePlayer('r');
                             view.move(speedView, 0);
                         }
@@ -101,7 +101,7 @@ int main()
                         if (!player.getIsMoved()) {
                             /* aStar.astar();*/
 
-                            if (aStar.astar()) {
+                            if (aStar.findPath()) {
                                 vector<char> path = aStar.getEasierToReadPath();
 
                                 sf::Clock clock;
@@ -118,7 +118,7 @@ int main()
 
                                             timeSinceLastUpdate -= frameTime;
                                             player.movePlayer(iter);
-                                            view.setCenter(player.getPos().x * player.getPlayerSize().x, player.getPos().y * player.getPlayerSize().y);
+                                            view.setCenter(player.getPosInMatrix().x * player.getPlayerSize().x, player.getPosInMatrix().y * player.getPlayerSize().y);
                                             player.setIsMoved(false);
 
                                             window.setView(view);
@@ -140,7 +140,7 @@ int main()
                     }
                     else if (event.key.code == sf::Keyboard::S) {
                         cout << "tasto S" << endl;
-                        view.setCenter(player.getPos().x * player.getPlayerSize().x, player.getPos().y * player.getPlayerSize().y);
+                        view.setCenter(player.getPosInMatrix().x * player.getPlayerSize().x, player.getPosInMatrix().y * player.getPlayerSize().y);
                     }
                     else if(event.key.code == sf::Keyboard::K)
                     {

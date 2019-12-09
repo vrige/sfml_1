@@ -13,27 +13,27 @@ Player::Player(const std::string& texture, sf::Vector2u playerSize){
 void Player::movePlayer(char direction){
     isMoved = true;
 
-    int x = pos.x;
-    int y = pos.y;
-    float xf = pos.x;
-    float yf = pos.y;
+    int x = posPlayer.x;
+    int y = posPlayer.y;
+    float xf = posPlayer.x;
+    float yf = posPlayer.y;
 
     switch(direction){
         case 'u':
-            setPos(x, y - 1);
-            setPosizione(xf * playerSize.x, (yf - 1)* playerSize.y);
+            setPosInMatrix(x, y - 1);
+            setPosInSprite(xf * playerSize.x, (yf - 1)* playerSize.y);
             break;
         case 'd':
-            setPos(x, y + 1);
-            setPosizione(xf * playerSize.x, (yf + 1)* playerSize.y);
+            setPosInMatrix(x, y + 1);
+            setPosInSprite(xf * playerSize.x, (yf + 1)* playerSize.y);
             break;
         case 'l':
-            setPos(x - 1, y);
-            setPosizione((xf - 1)* playerSize.x, yf* playerSize.y);
+            setPosInMatrix(x - 1, y);
+            setPosInSprite((xf - 1)* playerSize.x, yf* playerSize.y);
             break;
         case 'r':
-            setPos(x + 1,y);
-            setPosizione((xf + 1)* playerSize.x,yf* playerSize.y);
+            setPosInMatrix(x + 1,y);
+            setPosInSprite((xf + 1)* playerSize.x,yf* playerSize.y);
             break;
         default:
             std::cout<<"problemi nella scelta della direzione"<<std::endl;
@@ -42,19 +42,19 @@ void Player::movePlayer(char direction){
 sf::Sprite Player::getSprite(){
     return m_sprite;
 }
-sf::Vector2i Player::getPos(){
-    return this->pos;
+sf::Vector2i Player::getPosInMatrix(){
+    return this->posPlayer;
 }
-void Player::setPos(sf::Vector2i poss){
-    this->pos = poss;
+void Player::setPosInMatrix(sf::Vector2i poss){
+    this->posPlayer = poss;
 }
-void Player::setPos(int x, int y){
-    this->pos = sf::Vector2i(x,y);
+void Player::setPosInMatrix(int x, int y){
+    this->posPlayer = sf::Vector2i(x,y);
 }
-void Player::setPosizione(sf::Vector2f poss){
+void Player::setPosInSprite(sf::Vector2f poss){
     m_sprite.setPosition(poss);
 }
-void Player::setPosizione(float x, float y){
+void Player::setPosInSprite(float x, float y){
     m_sprite.setPosition(x,y);
 }
 bool Player::getIsMoved(){
