@@ -7,33 +7,32 @@
 #include <SFML/Graphics.hpp>
 #include <set>
 #include <memory>
-#include "Player.h"
+
 
 class TileMap  : public sf::ConvexShape{
 public:
 
-    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player);
-    TileMap( int x, int y, int tiles,sf::Vector2u tileSize, int percentualeZeri, Player* player);
-    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, std::unique_ptr<int[]>& matX);
+    TileMap( int x, int y, int tiles, sf::Vector2u tileSize);
+    TileMap( int x, int y, int tiles,sf::Vector2u tileSize, int percentualeZeri);
+    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::unique_ptr<int[]>& matX);
 
-    virtual ~TileMap();
 
     static void matXCasuale(std::unique_ptr<int[]>& matX, int x, int y, int n);
     static void matXCasualeWithPercentage(std::unique_ptr<int[]>& matX, int x, int y, int n, int percentage);
     static void print(std::unique_ptr<int[]>& matX, int x, int y);
 
     bool load(const std::string& tileset, sf::Vector2i pos);
-    bool checkGridPossibileMove(char direction);
+    bool checkGridPossibileMove(char direction, sf::Vector2i posPlayer);
+
+    sf::Vector2i  makePlayerStartGreen(sf::Vector2i posInitPlayer);
 
     sf::Vector2i getGoal();
-    sf::Vector2i getPosPlayer();
     int getValueAt(int matx);
     int getWidth();
     int getHeigth();
 
 private:
     void generateGoal(sf::Vector2i pos);
-    bool playerStartGreen(sf::Vector2i pos);
     static int genRandomNumber(int n);
     static int genRandomNumberWithPercentage(int n, int percentage);
 
@@ -43,7 +42,6 @@ private:
     sf::VertexArray m_vertices;
     sf::Texture m_tileset;
     sf::Vector2u m_tileSize;
-    Player* player;
     sf::Vector2i goal;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

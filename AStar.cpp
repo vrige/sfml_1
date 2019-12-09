@@ -1,15 +1,16 @@
 #include "AStar.h"
 
-AStar::AStar(TileMap* tilemap, sf::Vector2i goal ): tilemap(tilemap), goal(goal) {
+AStar::AStar(TileMap* tilemap,  Player* player, sf::Vector2i goal ): tilemap(tilemap),player(player),goal(goal) {
     width = tilemap->getWidth();
     heigth = tilemap->getHeigth();
-    posInit = tilemap->getPosPlayer();
-    posPlayer = tilemap->getPosPlayer();
+    posInit = player->getPos();
+    posPlayer = player->getPos();
     std::cout << "creazione di Astar" << std::endl;
 }
 AStar::~AStar(){
-    std::cout<<"delete tilemap"<<std::endl;
+    std::cout<<"delete tilemap and player"<<std::endl;
     delete tilemap;
+    delete player;
 }
 int AStar::h_heuristic(sf::Vector2i pos){  //manhattan heuristic
     int dx = abs(pos.x - goal.x);
@@ -42,13 +43,13 @@ int AStar::f_heuristic(int pos){
     return f_heuristic(posVec);
 }
 bool AStar::astar() {
-    posInit = tilemap->getPosPlayer();
+    posInit = player->getPos();
     std::set<int> openList;
 
     std::unordered_map<int, double> cost_so_far;
     std::unordered_map<int, int> came_from;
 
-    int start = tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width;
+    int start = player->getPos().x + player->getPos().y * width;
     openList.insert(start);
     cost_so_far[start] = 0;
     came_from[start] = start;
@@ -88,8 +89,8 @@ bool AStar::astar() {
     }
 }
 void AStar::testHeuristics(){
-    int pos = tilemap->getPosPlayer().x + tilemap->getPosPlayer().y * width;
-    std::cout<<"posizione attuale "<<tilemap->getPosPlayer().x <<" " <<tilemap->getPosPlayer().y;
+    int pos = player->getPos().x +player->getPos().y * width;
+    std::cout<<"posizione attuale "<<player->getPos().x <<" " <<player->getPos().y;
     std::cout<<"  g: "<<g_distance(pos);
     std::cout<<",  h: "<<h_heuristic(pos);
     std::cout<<",  f: "<<f_heuristic(pos)<<std::endl;
@@ -128,7 +129,7 @@ int AStar::getTheMinorFfromSet(std::set<int> set){
         int min = 100000;
         int minEle = -1;
         for(int iter : set){
-            std::cout<<"pos: "<<iter<<" value of f: " << f_heuristic(iter)<<std::endl;
+           // std::cout<<"pos: "<<iter<<" value of f: " << f_heuristic(iter)<<std::endl;
             if(f_heuristic(iter) < min){
                 min = f_heuristic(iter);
                 minEle = iter;

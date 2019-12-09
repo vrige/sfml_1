@@ -9,13 +9,14 @@
 #include <iterator>
 #include <unordered_map>
 #include "TileMap.h"
+#include "Player.h"
 
 class AStar {
     //la soluzione dovrà in qualche modo essere raccolta ed utilizzata per mostrare che graficamente il player arriva al goal (oppure no)
     //Dopo di ciò marcare il path con un colore diverso
 
 public:
-    AStar(TileMap* tilemap, sf::Vector2i goal);
+    AStar(TileMap* tilemap, Player* player, sf::Vector2i goal);
     virtual ~AStar();
     bool astar();
     void testHeuristics();
@@ -36,6 +37,7 @@ private:
 
 
     TileMap* tilemap;
+    Player* player;
     int width;
     int heigth;
     sf::Vector2i goal;

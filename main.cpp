@@ -15,7 +15,7 @@ int main()
     int x = 20;
     int y = 20;
     int tiles = 4;
-    int percentageOfZeros = 25;
+    int percentageOfZeros = 95;
     float speedView = 30;
     string tileSet ="./img/tileset.png";
     string tileSetForPlayer = "./img/game34x34.png";
@@ -24,14 +24,21 @@ int main()
 
 
     Player player(tileSetForPlayer,tileSize);
-    TileMap map(x,y,tiles,tileSize,percentageOfZeros,&player);
+    TileMap map(x,y,tiles,tileSize,percentageOfZeros);
 
 
     if (!map.load(tileSet,posInitPlayer)){
         cout<<"problemi nel rendering della mappa"<<endl;
         return -1;
     }
-    AStar aStar(&map, map.getGoal());
+
+
+    posInitPlayer = map.makePlayerStartGreen(posInitPlayer);
+    player.setPos(posInitPlayer);
+    player.setPosizione(sf::Vector2f(posInitPlayer.x*tileSize.x,posInitPlayer.y*tileSize.y));
+
+
+    AStar aStar(&map, &player, map.getGoal());
 
 
     sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
@@ -60,7 +67,7 @@ int main()
                     if(event.key.code == sf::Keyboard::Up)
                     {
                         cout << "up" << endl;
-                        if(map.checkGridPossibileMove('u') && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('u', player.getPos()) && !player.getIsMoved()){
                             player.movePlayer('u');
                             view.move(0, -speedView);
                         }
@@ -68,7 +75,7 @@ int main()
                     else if(event.key.code == sf::Keyboard::Down)
                     {
                         cout << "down" << endl;
-                        if(map.checkGridPossibileMove('d') && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('d', player.getPos()) && !player.getIsMoved()){
                             player.movePlayer('d');
                             view.move(0, speedView);
                         }
@@ -76,7 +83,7 @@ int main()
                     else if(event.key.code == sf::Keyboard::Left)
                     {
                         cout << "left" << endl;
-                        if(map.checkGridPossibileMove('l') && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('l', player.getPos()) && !player.getIsMoved()){
                             player.movePlayer('l');
                             view.move(-speedView, 0);
                         }
@@ -84,7 +91,7 @@ int main()
                     else if(event.key.code == sf::Keyboard::Right)
                     {
                         cout << "right" << endl;
-                        if(map.checkGridPossibileMove('r') && !player.getIsMoved()){
+                        if(map.checkGridPossibileMove('r', player.getPos()) && !player.getIsMoved()){
                             player.movePlayer('r');
                             view.move(speedView, 0);
                         }

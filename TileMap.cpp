@@ -1,28 +1,26 @@
 #include "TileMap.h"
 
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player):
-width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize):
+width(x),height(y),tiles(tiles),m_tileSize(tileSize){
     std::unique_ptr<int[]> p1( std::make_unique<int[]>(x*y) );
     matX = std::move(p1);
     srand((unsigned)time(nullptr));
     matXCasuale(matX,x,y,tiles);
     print(matX,x,y);
 }
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri, Player* player):
-width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri):
+width(x),height(y),tiles(tiles),m_tileSize(tileSize){
     std::unique_ptr<int[]> p1( std::make_unique<int[]>(x*y) );
     matX = std::move(p1);
     srand((unsigned)time(nullptr));
     matXCasualeWithPercentage(matX,x,y,tiles,percentualeZeri);
     print(matX,x,y);
 }
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, Player* player, std::unique_ptr<int[]>& matX):
-        width(x),height(y),tiles(tiles),m_tileSize(tileSize),player(player){
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::unique_ptr<int[]>& matX):
+        width(x),height(y),tiles(tiles),m_tileSize(tileSize){
     matX = std::move(matX);
     print(matX,x,y);
     srand((unsigned)time(nullptr));
-}
-TileMap::~TileMap() {
 }
 void TileMap::matXCasuale(std::unique_ptr<int[]>& matX, int x, int y, int n){
     for(int i = 0; i < x; i++){
@@ -99,45 +97,30 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
             }
         }
     }
-    if(playerStartGreen(pos)){
-        std::cout<<"player correttamente allocato in "<< pos.x << " "<< pos.y << std::endl;
-        return true;
-    }
-    std::cout<<"la posizione del personaggio è fuori dal tileset"<<std::endl;
-    return false;
+    return true;
 }
-bool TileMap::playerStartGreen( sf::Vector2i pos){
-    if(0 <= pos.x && pos.x < width && 0 <= pos.y && pos.y < height){
-        unsigned int i = pos.x;
-        unsigned int j = pos.y;
-        if(matX[i + j * width] != 0){
-            std::cout<<"l'allocazione fornita non è uno spazio verde."<<std::endl;
-            std::cout<<"Verrà assegnato il primo spazio verde disponibile"<<std::endl;
-            i = 0;
-            j = 0;
-            while(matX[i + j * width] != 0){
-                if(i == (width - 1) && j != (height - 1)){
-                    i = 0;
-                    j++;
-                }
-                else if(i != (width - 1)){
-                    i++;
-                }
-                else{
-                    std::cout<<"non ci sono spazi verdi dove allocare il player" << std::endl;
-                    return false;
-                }
-                std::cout<<"sono ancora nel while" << std::endl;
+sf::Vector2i  TileMap::makePlayerStartGreen( sf::Vector2i posInitPlayer){
+    unsigned int i = posInitPlayer.x;
+    unsigned int j = posInitPlayer.y;
+    if(matX[i + j * width] != 0) {
+        std::cout << "l'allocazione fornita non è uno spazio verde." << std::endl;
+        std::cout << "Verrà assegnato il primo spazio verde disponibile" << std::endl;
+        i = 0;
+        j = 0;
+        while (matX[i + j * width] != 0) {
+            if (i == (width - 1) && j != (height - 1)) {
+                i = 0;
+                j++;
+            } else if (i != (width - 1)) {
+                i++;
+            } else {
+                std::cout << "non ci sono spazi verdi dove allocare il player" << std::endl;
+                return sf::Vector2i(-1, -1);
             }
+            std::cout << "sono ancora nel while" << std::endl;
         }
-        this->player->setPos(sf::Vector2i(i,j));
-        this->player->setPosizione(sf::Vector2f(i*m_tileSize.x,j*m_tileSize.y));
-        return true;
     }
-    else{
-        std::cout<<"la posizione del personaggio è fuori dal tileset"<<std::endl;
-        return false;
-    }
+    return sf::Vector2i(i, j);
 }
 int TileMap::genRandomNumber(int n){
     int i;
@@ -153,13 +136,12 @@ int TileMap::genRandomNumberWithPercentage(int n, int percentage){
     i = (i % (n - 1)) + 1;
     return i;
 }
-bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
-    sf::Vector2i pos = this->player->getPos();
-   // std::cout<<"pos player from: "<< pos.x <<" " <<pos.y<< std::endl;
+bool TileMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
+   // std::cout<<" player from: "<< .x <<" " <<.y<< std::endl;
     switch(direction){
         case 'u':
-            if(matX[pos.x + (pos.y - 1)* width] != 0 || pos.y == 0){
-                if( matX[pos.x + (pos.y - 1)* width] == 5){
+            if(matX[posPlayer.x + (posPlayer.y - 1)* width] != 0 || posPlayer.y == 0){
+                if( matX[posPlayer.x + (posPlayer.y - 1)* width] == 5){
                     std::cout<<"ma quello è il goal!"<<std::endl;
                 }else{
                     std::cout<<"can't go up"<<std::endl;
@@ -168,8 +150,8 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
             }
             break;
         case 'd':
-            if(matX[pos.x + (pos.y + 1)* width] != 0 || pos.y == height - 1 ){
-                if(  matX[pos.x + (pos.y + 1)* width] == 5){
+            if(matX[posPlayer.x + (posPlayer.y + 1)* width] != 0 || posPlayer.y == height - 1 ){
+                if(  matX[posPlayer.x + (posPlayer.y + 1)* width] == 5){
                     std::cout<<"ma quello è il goal!"<<std::endl;
                 }else{
                     std::cout<<"can't go down"<<std::endl;
@@ -178,8 +160,8 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
             }
             break;
         case 'l':
-            if(matX[(pos.x - 1) + pos.y * width] != 0 || pos.x == 0 ){
-                if( matX[(pos.x - 1) + pos.y * width] == 5){
+            if(matX[(posPlayer.x - 1) + posPlayer.y * width] != 0 || posPlayer.x == 0 ){
+                if( matX[(posPlayer.x - 1) + posPlayer.y * width] == 5){
                     std::cout<<"ma quello è il goal!"<<std::endl;
                 }else{
                     std::cout<<"can't go left"<<std::endl;
@@ -188,8 +170,8 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
             }
             break;
         case 'r':
-            if(matX[(pos.x + 1) + pos.y * width] != 0  || pos.x == width - 1 ) {
-                if(matX[(pos.x + 1) + pos.y * width] == 5) {
+            if(matX[(posPlayer.x + 1) + posPlayer.y * width] != 0  || posPlayer.x == width - 1 ) {
+                if(matX[(posPlayer.x + 1) + posPlayer.y * width] == 5) {
                     std::cout << "ma quello è il goal!" << std::endl;
                 } else {
                     std::cout << "can't go right" << std::endl;
@@ -204,9 +186,6 @@ bool TileMap::checkGridPossibileMove(char direction){ // si basa sul fatto che l
 }
 sf::Vector2i TileMap::getGoal(){
     return goal;
-}
-sf::Vector2i TileMap::getPosPlayer(){
-    return player->getPos();
 }
 int TileMap::getValueAt(int matx){
     return matX[matx];
