@@ -31,7 +31,7 @@ private:
     int f_heuristic(int pos);
     std::set<int> checkChildren(sf::Vector2i pos);
     std::set<int> checkChildren(int pos);
-    int getTheMinorFfromSet(std::set<int> set);
+    int getTheMinorFromSet(std::set<int> set, std::unordered_map<int, int> cost_so_far);
     std::vector<int> reconstruct_path(std::unordered_map<int, int> came_from);
     std::vector<char> reconstruct_EasierToReadPath();
 

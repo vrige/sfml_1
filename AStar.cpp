@@ -45,7 +45,7 @@ bool AStar::findPath() {
     posInit = player->getPosInMatrix();
     std::set<int> openList;
 
-    std::unordered_map<int, double> cost_so_far;
+    std::unordered_map<int, int> cost_so_far;
     std::unordered_map<int, int> came_from;
 
     int start = posInit.x + posInit.y * width;
@@ -56,7 +56,7 @@ bool AStar::findPath() {
     int current = -1;
 
     while(!openList.empty()){
-        current = getTheMinorFfromSet(openList);
+        current = getTheMinorFromSet(openList, cost_so_far);
         openList.erase(current);
 
         if(h_heuristic(current) == 0) { //è il goal!
@@ -65,7 +65,8 @@ bool AStar::findPath() {
         }else{
             std::set<int> children = checkChildren(current);
             for(int child : children){
-                int cost = g_distance(child) + 1;
+                int tile_cost = 1 + tilemap->getValueAt(child);
+                int cost = g_distance(current) + tile_cost;
 
                 if (cost_so_far.find(child) == cost_so_far.end()
                     || cost < cost_so_far[child]) {
@@ -131,14 +132,14 @@ std::set<int> AStar::checkChildren(int pos){
     }
     return children;
 }
-int AStar::getTheMinorFfromSet(std::set<int> set){
+int AStar::getTheMinorFromSet(std::set<int> set, std::unordered_map<int, int> cost_so_far){
     if(!set.empty()){
         int min = 100000;
         int minEle = -1;
         for(int iter : set){
            // std::cout<<"pos: "<<iter<<" value of f: " << f_heuristic(iter)<<std::endl;
-            if(f_heuristic(iter) < min){
-                min = f_heuristic(iter);
+            if(cost_so_far[iter] + h_heuristic(iter) < min){
+                min = cost_so_far[iter] + h_heuristic(iter);
                 minEle = iter;
             }
         }
