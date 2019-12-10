@@ -15,7 +15,7 @@ int main()
     int x = 20;
     int y = 20;
     int tiles = 4;
-    int percentageOfZeros = 95;
+    int percentageOfZeros = 55;
     float speedView = 30;
     string tileSet ="./img/tileset.png";
     string tileSetForPlayer = "./img/game34x34.png";

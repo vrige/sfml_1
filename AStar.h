@@ -12,12 +12,9 @@
 #include "Player.h"
 
 class AStar {
-    //la soluzione dovrà in qualche modo essere raccolta ed utilizzata per mostrare che graficamente il player arriva al goal (oppure no)
-    //Dopo di ciò marcare il path con un colore diverso
-
 public:
-    AStar(TileMap* tilemap, Player* player, sf::Vector2i goal);
-    virtual ~AStar();
+    AStar(TileMap* tilemap,  Player* player, sf::Vector2i goal );
+    ~AStar();
     bool findPath();
     void testHeuristics();
     std::vector<int> getPath();

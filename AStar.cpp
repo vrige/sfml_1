@@ -65,15 +65,15 @@ bool AStar::findPath() {
         }else{
             std::set<int> children = checkChildren(current);
             for(int child : children){
-                int tile_cost = 1 + tilemap->getValueAt(child);
-                int cost = g_distance(current) + tile_cost;
+                int tile_cost = 1 + tilemap->getValueAt(child) % 5;
+                int cost = cost_so_far[current] + tile_cost;
 
-                if (cost_so_far.find(child) == cost_so_far.end()
-                    || cost < cost_so_far[child]) {
+                if (cost_so_far.find(child) == cost_so_far.end()) {
                     cost_so_far[child] = cost;
                     openList.insert(child);
                     came_from[child] = current;
                 }
+
             }
         }
     }
@@ -138,9 +138,9 @@ int AStar::getTheMinorFromSet(std::set<int> set, std::unordered_map<int, int> co
         int minEle = -1;
         for(int iter : set){
            // std::cout<<"pos: "<<iter<<" value of f: " << f_heuristic(iter)<<std::endl;
-            if(cost_so_far[iter] + h_heuristic(iter) < min){
-                min = cost_so_far[iter] + h_heuristic(iter);
-                minEle = iter;
+            if(cost_so_far[iter] + f_heuristic(iter) < min){  //notare che non viene utilizzata f_heurisitc perchè
+                min = cost_so_far[iter] + f_heuristic(iter);  //in cost_so_far c'è già g_heuristic, quindi basta utilizzare
+                minEle = iter;                                //h_heuristic
             }
         }
         return minEle;
@@ -150,10 +150,12 @@ int AStar::getTheMinorFromSet(std::set<int> set, std::unordered_map<int, int> co
     }
 }
 std::vector<int> AStar::reconstruct_path(std::unordered_map<int, int> came_from){
+    std::cout<<"reostruct_path start"<<std::endl;
     std::vector<int> pathh;
     int current = goal.x + goal.y*width;
     int start = posInit.x + posInit.y * width;
     while (current != start) {
+        std::cout<<current<<std::endl;
         pathh.push_back(current);
         current = came_from[current];
     }
