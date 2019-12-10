@@ -42,7 +42,6 @@ private:
     int heigth;
     sf::Vector2i goal;
     sf::Vector2i posInit;
-    sf::Vector2i posPlayer;
     std::vector<int> path;
     std::vector<char> easierToReadPath;
 };

@@ -4,7 +4,6 @@ AStar::AStar(TileMap* tilemap,  Player* player, sf::Vector2i goal ): tilemap(til
     width = tilemap->getWidth();
     heigth = tilemap->getHeigth();
     posInit = player->getPosInMatrix();
-    posPlayer = player->getPosInMatrix();
     std::cout << "creazione di Astar" << std::endl;
 }
 AStar::~AStar(){
@@ -49,7 +48,7 @@ bool AStar::findPath() {
     std::unordered_map<int, double> cost_so_far;
     std::unordered_map<int, int> came_from;
 
-    int start = player->getPosInMatrix().x + player->getPosInMatrix().y * width;
+    int start = posInit.x + posInit.y * width;
     openList.insert(start);
     cost_so_far[start] = 0;
     came_from[start] = start;
@@ -106,21 +105,27 @@ std::set<int> AStar::checkChildren(sf::Vector2i pos){
 }
 std::set<int> AStar::checkChildren(int pos){
     std::set<int> children;
-    if(tilemap->getValueAt(pos + 1) == 0 || tilemap->getValueAt(pos + 1) == 5){ //right
-       // std::cout<<"dx libera"<<std::endl;
-        children.insert(pos + 1);
-    }
-    if(tilemap->getValueAt(pos - 1) == 0 || tilemap->getValueAt(pos - 1) == 5) { //left
-      //  std::cout<<"sx libera"<<std::endl;
-        children.insert(pos - 1);
-    }
-    if(tilemap->getValueAt(pos + width) == 0 || tilemap->getValueAt(pos + width) == 5) { //down
-       // std::cout<<"dw libera"<<std::endl;
-        children.insert(pos + width);
-    }
-    if(tilemap->getValueAt(pos - width) == 0 || tilemap->getValueAt(pos - width) == 5) { //up
-        //std::cout<<"up libera"<<std::endl;
-        children.insert(pos - width);
+    std::set<char> moves = {'u','r','d','l'};
+    sf::Vector2i posPlayer = sf::Vector2i(pos % width,pos / width);
+    for(char move : moves){
+        if(tilemap->checkGridPossibileMove(move, posPlayer)){
+            switch(move){
+                case 'u':
+                    children.insert(pos - width);
+                    break;
+                case 'r':
+                    children.insert(pos + 1);
+                    break;
+                case 'd':
+                    children.insert(pos + width);
+                    break;
+                case 'l':
+                    children.insert(pos - 1);
+                    break;
+                default:
+                    std::cout<<"c'è qualche problema nel checkChildren"<<std::endl;
+            }
+        }
     }
     return children;
 }
@@ -156,7 +161,7 @@ std::vector<int> AStar::reconstruct_path(std::unordered_map<int, int> came_from)
 }
 std::vector<char> AStar::reconstruct_EasierToReadPath(){
     std::vector<char> dir;
-    for(std::vector<int>::iterator it = path.begin() ; it != (path.end() - 1) ; ++it){
+    for(auto it = path.begin() ; it != (path.end() - 1) ; ++it){
 
         int direction = *it - *(it + 1);
 
