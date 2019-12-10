@@ -138,45 +138,31 @@ int TileMap::genRandomNumberWithPercentage(int n, int percentage){
 }
 bool TileMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
    // std::cout<<" player from: "<< .x <<" " <<.y<< std::endl;
+    int num = posPlayer.x + posPlayer.y * width;
+    std::set<int> allowedTiles = {0,1,5};
     switch(direction){
         case 'u':
-            if(matX[posPlayer.x + (posPlayer.y - 1)* width] != 0 || posPlayer.y == 0){
-                if( matX[posPlayer.x + (posPlayer.y - 1)* width] == 5){
-                    std::cout<<"ma quello è il goal!"<<std::endl;
-                }else{
-                    std::cout<<"can't go up"<<std::endl;
-                    return false;
-                }
+            if(allowedTiles.find(matX[num - width]) == allowedTiles.end() || posPlayer.y == 0){
+                std::cout<<"can't go up"<<std::endl;
+                return false;
             }
             break;
         case 'd':
-            if(matX[posPlayer.x + (posPlayer.y + 1)* width] != 0 || posPlayer.y == height - 1 ){
-                if(  matX[posPlayer.x + (posPlayer.y + 1)* width] == 5){
-                    std::cout<<"ma quello è il goal!"<<std::endl;
-                }else{
-                    std::cout<<"can't go down"<<std::endl;
-                    return false;
-                }
+            if(allowedTiles.find(matX[num + width]) == allowedTiles.end()|| posPlayer.y == height - 1 ){
+                std::cout<<"can't go down"<<std::endl;
+                return false;
             }
             break;
         case 'l':
-            if(matX[(posPlayer.x - 1) + posPlayer.y * width] != 0 || posPlayer.x == 0 ){
-                if( matX[(posPlayer.x - 1) + posPlayer.y * width] == 5){
-                    std::cout<<"ma quello è il goal!"<<std::endl;
-                }else{
-                    std::cout<<"can't go left"<<std::endl;
-                    return false;
-                }
+            if(allowedTiles.find(matX[num - 1]) == allowedTiles.end() || posPlayer.x == 0 ){
+                std::cout<<"can't go left"<<std::endl;
+                return false;
             }
             break;
         case 'r':
-            if(matX[(posPlayer.x + 1) + posPlayer.y * width] != 0  || posPlayer.x == width - 1 ) {
-                if(matX[(posPlayer.x + 1) + posPlayer.y * width] == 5) {
-                    std::cout << "ma quello è il goal!" << std::endl;
-                } else {
-                    std::cout << "can't go right" << std::endl;
-                    return false;
-                }
+            if(allowedTiles.find(matX[num + 1]) == allowedTiles.end() || posPlayer.x == width - 1 ) {
+                std::cout << "can't go right" << std::endl;
+                return false;
             }
             break;
         default:
