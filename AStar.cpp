@@ -84,6 +84,8 @@ bool AStar::findPath() {
         return true;
     }else{
         std::cout<<"goal non trovato!" << std::endl;
+        path.clear();
+        easierToReadPath.clear();
         return false;
     }
 }
@@ -101,7 +103,7 @@ void AStar::testHeuristics(){
     }
 }
 std::set<int> AStar::checkChildren(sf::Vector2i pos){
-    checkChildren(pos.x + pos.y * width);
+    return checkChildren(pos.x + pos.y * width);
 }
 std::set<int> AStar::checkChildren(int pos){
     std::set<int> children;
