@@ -13,6 +13,7 @@
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
+-- Found PythonInterp: C:/ProgramData/Anaconda3/python.exe (found version "3.7.1") 
 -- Found SFML 2.5.1 in D:/Libraries/SFML-2.5.1/lib/cmake/SFML
 -- Configuring done
 -- Generating done

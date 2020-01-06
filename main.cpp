@@ -1,14 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "TileMap.h"
-#include "Player.h"
-#include "AStar.h"
+#include "Tests/TileMap.h"
+#include "Tests/Player.h"
+#include "Tests/AStar.h"
 
 
 using namespace std;
 
-int main()
-{
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+    /*
     sf::RenderWindow window(sf::VideoMode(736, 736), "Tileset");
     window.setPosition(sf::Vector2i(620,0));
 
@@ -99,7 +101,7 @@ int main()
                     else if (event.key.code == sf::Keyboard::A) {
                         cout << "tasto A" << endl;
                         if (!player.getIsMoved()) {
-                            /* aStar.astar();*/
+
 
                             if (aStar.findPath()) {
                                 vector<char> path = aStar.getEasierToReadPath();
@@ -203,5 +205,5 @@ int main()
          window.display();
      }
 
-     return 0;
+     return 0;*/
  }

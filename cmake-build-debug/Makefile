@@ -55,16 +55,29 @@ CMAKE_BINARY_DIR = C:\Users\cristina\CLionProjects\sfml_1\cmake-build-debug
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
-.PHONY : rebuild_cache/fast
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -P cmake_install.cmake
+.PHONY : install/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -76,6 +89,39 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	"C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -110,44 +156,204 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named sfml_1
+# Target rules for targets named unit_testing_sfml_prova
 
 # Build rule for target.
-sfml_1: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 sfml_1
-.PHONY : sfml_1
+unit_testing_sfml_prova: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 unit_testing_sfml_prova
+.PHONY : unit_testing_sfml_prova
 
 # fast build rule for target.
-sfml_1/fast:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/build
-.PHONY : sfml_1/fast
+unit_testing_sfml_prova/fast:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/build
+.PHONY : unit_testing_sfml_prova/fast
 
-TileMap.obj: TileMap.cpp.obj
+#=============================================================================
+# Target rules for targets named gmock_main
 
-.PHONY : TileMap.obj
+# Build rule for target.
+gmock_main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 gmock_main
+.PHONY : gmock_main
+
+# fast build rule for target.
+gmock_main/fast:
+	$(MAKE) -f lib\googletest-master\googlemock\CMakeFiles\gmock_main.dir\build.make lib/googletest-master/googlemock/CMakeFiles/gmock_main.dir/build
+.PHONY : gmock_main/fast
+
+#=============================================================================
+# Target rules for targets named gmock
+
+# Build rule for target.
+gmock: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 gmock
+.PHONY : gmock
+
+# fast build rule for target.
+gmock/fast:
+	$(MAKE) -f lib\googletest-master\googlemock\CMakeFiles\gmock.dir\build.make lib/googletest-master/googlemock/CMakeFiles/gmock.dir/build
+.PHONY : gmock/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) -f lib\googletest-master\googletest\CMakeFiles\gtest.dir\build.make lib/googletest-master/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) -f lib\googletest-master\googletest\CMakeFiles\gtest_main.dir\build.make lib/googletest-master/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
+
+Tests/AStar.obj: Tests/AStar.cpp.obj
+
+.PHONY : Tests/AStar.obj
 
 # target to build an object file
-TileMap.cpp.obj:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/TileMap.cpp.obj
-.PHONY : TileMap.cpp.obj
+Tests/AStar.cpp.obj:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/AStar.cpp.obj
+.PHONY : Tests/AStar.cpp.obj
 
-TileMap.i: TileMap.cpp.i
+Tests/AStar.i: Tests/AStar.cpp.i
 
-.PHONY : TileMap.i
+.PHONY : Tests/AStar.i
 
 # target to preprocess a source file
-TileMap.cpp.i:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/TileMap.cpp.i
-.PHONY : TileMap.cpp.i
+Tests/AStar.cpp.i:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/AStar.cpp.i
+.PHONY : Tests/AStar.cpp.i
 
-TileMap.s: TileMap.cpp.s
+Tests/AStar.s: Tests/AStar.cpp.s
 
-.PHONY : TileMap.s
+.PHONY : Tests/AStar.s
 
 # target to generate assembly for a file
-TileMap.cpp.s:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/TileMap.cpp.s
-.PHONY : TileMap.cpp.s
+Tests/AStar.cpp.s:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/AStar.cpp.s
+.PHONY : Tests/AStar.cpp.s
+
+Tests/ClassName.obj: Tests/ClassName.cpp.obj
+
+.PHONY : Tests/ClassName.obj
+
+# target to build an object file
+Tests/ClassName.cpp.obj:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/ClassName.cpp.obj
+.PHONY : Tests/ClassName.cpp.obj
+
+Tests/ClassName.i: Tests/ClassName.cpp.i
+
+.PHONY : Tests/ClassName.i
+
+# target to preprocess a source file
+Tests/ClassName.cpp.i:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/ClassName.cpp.i
+.PHONY : Tests/ClassName.cpp.i
+
+Tests/ClassName.s: Tests/ClassName.cpp.s
+
+.PHONY : Tests/ClassName.s
+
+# target to generate assembly for a file
+Tests/ClassName.cpp.s:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/ClassName.cpp.s
+.PHONY : Tests/ClassName.cpp.s
+
+Tests/Player.obj: Tests/Player.cpp.obj
+
+.PHONY : Tests/Player.obj
+
+# target to build an object file
+Tests/Player.cpp.obj:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/Player.cpp.obj
+.PHONY : Tests/Player.cpp.obj
+
+Tests/Player.i: Tests/Player.cpp.i
+
+.PHONY : Tests/Player.i
+
+# target to preprocess a source file
+Tests/Player.cpp.i:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/Player.cpp.i
+.PHONY : Tests/Player.cpp.i
+
+Tests/Player.s: Tests/Player.cpp.s
+
+.PHONY : Tests/Player.s
+
+# target to generate assembly for a file
+Tests/Player.cpp.s:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/Player.cpp.s
+.PHONY : Tests/Player.cpp.s
+
+Tests/TileMap.obj: Tests/TileMap.cpp.obj
+
+.PHONY : Tests/TileMap.obj
+
+# target to build an object file
+Tests/TileMap.cpp.obj:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/TileMap.cpp.obj
+.PHONY : Tests/TileMap.cpp.obj
+
+Tests/TileMap.i: Tests/TileMap.cpp.i
+
+.PHONY : Tests/TileMap.i
+
+# target to preprocess a source file
+Tests/TileMap.cpp.i:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/TileMap.cpp.i
+.PHONY : Tests/TileMap.cpp.i
+
+Tests/TileMap.s: Tests/TileMap.cpp.s
+
+.PHONY : Tests/TileMap.s
+
+# target to generate assembly for a file
+Tests/TileMap.cpp.s:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/TileMap.cpp.s
+.PHONY : Tests/TileMap.cpp.s
+
+Tests/test.obj: Tests/test.cpp.obj
+
+.PHONY : Tests/test.obj
+
+# target to build an object file
+Tests/test.cpp.obj:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/test.cpp.obj
+.PHONY : Tests/test.cpp.obj
+
+Tests/test.i: Tests/test.cpp.i
+
+.PHONY : Tests/test.i
+
+# target to preprocess a source file
+Tests/test.cpp.i:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/test.cpp.i
+.PHONY : Tests/test.cpp.i
+
+Tests/test.s: Tests/test.cpp.s
+
+.PHONY : Tests/test.s
+
+# target to generate assembly for a file
+Tests/test.cpp.s:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/test.cpp.s
+.PHONY : Tests/test.cpp.s
 
 main.obj: main.cpp.obj
 
@@ -155,7 +361,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/main.cpp.obj
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -164,7 +370,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -173,7 +379,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles\sfml_1.dir\build.make CMakeFiles/sfml_1.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -182,12 +388,32 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... rebuild_cache
-	@echo ... sfml_1
+	@echo ... unit_testing_sfml_prova
+	@echo ... install/local
+	@echo ... install
 	@echo ... edit_cache
-	@echo ... TileMap.obj
-	@echo ... TileMap.i
-	@echo ... TileMap.s
+	@echo ... rebuild_cache
+	@echo ... list_install_components
+	@echo ... install/strip
+	@echo ... gmock_main
+	@echo ... gmock
+	@echo ... gtest
+	@echo ... gtest_main
+	@echo ... Tests/AStar.obj
+	@echo ... Tests/AStar.i
+	@echo ... Tests/AStar.s
+	@echo ... Tests/ClassName.obj
+	@echo ... Tests/ClassName.i
+	@echo ... Tests/ClassName.s
+	@echo ... Tests/Player.obj
+	@echo ... Tests/Player.i
+	@echo ... Tests/Player.s
+	@echo ... Tests/TileMap.obj
+	@echo ... Tests/TileMap.i
+	@echo ... Tests/TileMap.s
+	@echo ... Tests/test.obj
+	@echo ... Tests/test.i
+	@echo ... Tests/test.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
