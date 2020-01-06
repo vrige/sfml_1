@@ -32,7 +32,7 @@ TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::unique_pt
         width(x),height(y),tiles(tiles),m_tileSize(tileSize), goal(goal){
     matX = std::move(mat);
     isThereAGoal = true;
-    // print(matX,x,y);
+     // print(matX,x,y);
     srand((unsigned)time(nullptr));
 }
 void TileMap::matXCasuale(std::unique_ptr<int[]>& matX, int x, int y, int n){
