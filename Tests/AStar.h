@@ -1,5 +1,5 @@
-#ifndef UNIT_TESTING_SFML_ASTAR_H
-#define UNIT_TESTING_SFML_ASTAR_H
+#ifndef UNIT_TESTINF_SFML_PROVA2_ASTAR_H
+#define UNIT_TESTINF_SFML_PROVA2_ASTAR_H
 
 #include <cstdlib>
 #include <iostream>
@@ -8,18 +8,20 @@
 #include <map>
 #include <iterator>
 #include <unordered_map>
+#include <memory>
 #include "TileMap.h"
 #include "Player.h"
 #include "gtest/gtest.h"
 
 class AStar {
 public:
-    AStar(TileMap* tilemap,  Player* player, sf::Vector2i goal );
-    ~AStar();
+   // AStar(std::shared_ptr<TileMap> tilemap,  std::shared_ptr<Player> player, sf::Vector2i goal );
+    AStar(std::shared_ptr<TileMap>& tilemap,  std::shared_ptr<Player>& player, sf::Vector2i goal );
     bool findPath();
     void testHeuristics();
     std::vector<int> getPath();
     std::vector<char> getEasierToReadPath();
+    void setGoal(sf::Vector2i newGoal,const std::string& tileset);
 private:
     int h_heuristic(sf::Vector2i pos);
     int h_heuristic(int pos);
@@ -34,8 +36,8 @@ private:
     std::vector<char> reconstruct_EasierToReadPath();
 
 
-    TileMap* tilemap;
-    Player* player;
+    std::shared_ptr<TileMap> tilemap;
+    std::shared_ptr<Player> player;
     int width;
     int heigth;
     sf::Vector2i goal;
@@ -44,4 +46,4 @@ private:
     std::vector<char> easierToReadPath;
 };
 
-#endif //UNIT_TESTING_SFML_ASTAR_H
+#endif //UNIT_TESTINF_SFML_PROVA2_ASTAR_H

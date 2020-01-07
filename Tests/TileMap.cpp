@@ -3,57 +3,39 @@
 //
 
 #include "TileMap.h"
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize):
-        width(x),height(y),tiles(tiles),m_tileSize(tileSize){
-    std::unique_ptr<int[]> p1( std::make_unique<int[]>(x*y) );
-    matX = std::move(p1);
-    isThereAGoal = false;
-    srand((unsigned)time(nullptr));
-    matXCasuale(matX,x,y,tiles);
-  //  print(matX,x,y);
-}
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, int percentualeZeri):
-        width(x),height(y),tiles(tiles),m_tileSize(tileSize){
-    std::unique_ptr<int[]> p1( std::make_unique<int[]>(x*y) );
-    matX = std::move(p1);
-    isThereAGoal = false;
-    srand((unsigned)time(nullptr));
-    matXCasualeWithPercentage(matX,x,y,tiles,percentualeZeri);
-    //print(matX,x,y);
-}
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::unique_ptr<int[]>& mat, sf::Vector2i goal):
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>> mat, sf::Vector2i goal):
         width(x),height(y),tiles(tiles),m_tileSize(tileSize), goal(goal){
     matX = std::move(mat);
     isThereAGoal = true;
    // print(matX,x,y);
     srand((unsigned)time(nullptr));
 }
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::unique_ptr<int[]> mat, sf::Vector2i goal):
+TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>>& mat, sf::Vector2i goal):
         width(x),height(y),tiles(tiles),m_tileSize(tileSize), goal(goal){
     matX = std::move(mat);
     isThereAGoal = true;
-     // print(matX,x,y);
+    // print(matX,x,y);
     srand((unsigned)time(nullptr));
 }
-void TileMap::matXCasuale(std::unique_ptr<int[]>& matX, int x, int y, int n){
+void TileMap::matXCasuale(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n){
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
-            matX[i + j * x] = genRandomNumber(n);
+            setValueAt(i + j * x, genRandomNumber(n));
         }
     }
 }
-void TileMap::matXCasualeWithPercentage(std::unique_ptr<int[]>& matX, int x, int y, int n, int percentage){
+void TileMap::matXCasualeWithPercentage(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n, int percentage){
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
-            matX[i + j * x] = genRandomNumberWithPercentage(n,percentage);
+            setValueAt(i + j * x, genRandomNumberWithPercentage(n,percentage));
         }
     }
 }
-void TileMap::print( std::unique_ptr<int[]>& matX,int x, int y){
+void TileMap::print( std::shared_ptr<std::vector<int>>& matX,int x, int y){
     std::string a;
     for(int j = 0; j < y; j++){
         for(int i = 0; i < x; i++){
-            a += std::to_string(matX[i + j * x]) + " ";
+            a += std::to_string(getValueAt(i + j * x)) + " ";
         }
         std::cout<< a <<std::endl;
         a = "";
@@ -66,10 +48,18 @@ void TileMap::generateGoal(sf::Vector2i pos) {
         goalx = genRandomNumber(width);
         goaly = genRandomNumber(height);
     } while (goalx == pos.x && goaly == pos.y);
-    std::cout << "trovato un goal possibile in: "<<goalx<<" "<<goaly << std::endl;
-    matX[goalx + width * goaly] = 5; //5 è il goal
+   // std::cout << "trovato un goal possibile in: "<<goalx<<" "<<goaly << std::endl;
+    setValueAt(goalx + width * goaly, 5); //5 è il goal)
     goal = sf::Vector2i(goalx,goaly);
     isThereAGoal = true;
+}
+void TileMap::setGoal(sf::Vector2i newGoal, const std::string& tileset,sf::Vector2i pos){
+    if(isThereAGoal){
+        setValueAt(goal, 0);
+    }
+    goal = newGoal;
+
+    load(tileset, pos);
 }
 bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
 {
@@ -81,10 +71,11 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
     if(!isThereAGoal || (goal.x == pos.x && goal.y == pos.y) || goal.x < 0 || goal.y < 0 || goal.x > width - 1|| goal.y > height - 1){
         generateGoal(pos);
     }else{
-        matX[goal.x + width * goal.y] = 5;
+        setValueAt(goal.x + width * goal.y, 5);
     }
-    print(matX,width,height);
+    //print(matX,width,height);
 
+    m_vertices.clear();
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4 ); //ogni elemento della matX ha 4 punti
 
@@ -93,7 +84,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
         for ( int j = 0; j < height; ++j)
         {
 
-            int tileNumber = matX[i + j * width];
+            int tileNumber = getValueAt(i + j * width);
 
             int tu = tileNumber % (m_tileset.getSize().x / m_tileSize.x);
             int tv = tileNumber / (m_tileset.getSize().x / m_tileSize.x); //nel nostro caso è sempre zero
@@ -123,12 +114,12 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
 sf::Vector2i  TileMap::makePlayerStartGreen( sf::Vector2i posInitPlayer){
     unsigned int i = posInitPlayer.x;
     unsigned int j = posInitPlayer.y;
-    if(matX[i + j * width] != 0) {
+    if(getValueAt(i + j * width) != 0) {
         std::cout << "l'allocazione fornita non è uno spazio verde." << std::endl;
         std::cout << "Verrà assegnato il primo spazio verde disponibile" << std::endl;
         i = 0;
         j = 0;
-        while (matX[i + j * width] != 0) {
+        while (getValueAt(i + j * width) != 0) {
             if (i == (width - 1) && j != (height - 1)) {
                 i = 0;
                 j++;
@@ -163,27 +154,26 @@ bool TileMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ //
     std::set<int> allowedTiles = {0,1,5};
     switch(direction){
         case 'u':
-            if(allowedTiles.find(matX[num - width]) == allowedTiles.end() || posPlayer.y == 0){
-                std::cout<<"can't go up"<<std::endl;
+            if(allowedTiles.find(getValueAt(num - width)) == allowedTiles.end() || posPlayer.y == 0){
+              //  std::cout<<"can't go up"<<std::endl;
                 return false;
             }
             break;
         case 'd':
-            std::cout<<matX[num + width]<<std::endl;
-            if(allowedTiles.find(matX[num + width]) == allowedTiles.end()|| posPlayer.y == height - 1 ){
-                std::cout<<"can't go down"<<std::endl;
+            if(allowedTiles.find(getValueAt(num + width)) == allowedTiles.end()|| posPlayer.y == height - 1 ){
+               // std::cout<<"can't go down"<<std::endl;
                 return false;
             }
             break;
         case 'l':
-            if(allowedTiles.find(matX[num - 1]) == allowedTiles.end() || posPlayer.x == 0 ){
-                std::cout<<"can't go left"<<std::endl;
+            if(allowedTiles.find(getValueAt(num - 1)) == allowedTiles.end() || posPlayer.x == 0 ){
+              //  std::cout<<"can't go left"<<std::endl;
                 return false;
             }
             break;
         case 'r':
-            if(allowedTiles.find(matX[num + 1]) == allowedTiles.end() || posPlayer.x == width - 1 ) {
-                std::cout << "can't go right" << std::endl;
+            if(allowedTiles.find(getValueAt(num + 1)) == allowedTiles.end() || posPlayer.x == width - 1 ) {
+              //  std::cout << "can't go right" << std::endl;
                 return false;
             }
             break;
@@ -195,8 +185,20 @@ bool TileMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ //
 sf::Vector2i TileMap::getGoal(){
     return goal;
 }
-int TileMap::getValueAt(int matx){
-    return matX[matx];
+int TileMap::getValueAt(int num){
+    if(num < matX.get()->size() && num >= 0){
+        return matX.get()->at(num);
+    }else{
+        return 3; //3 è un ostacolo
+    }
+}
+void TileMap::setValueAt(int pos, int num){
+    if(pos < matX.get()->size() && pos >= 0){
+        matX.get()->at(pos) = num;
+    }
+}
+void TileMap::setValueAt(sf::Vector2i pos, int num){
+    setValueAt(pos.x + width * pos.y, num);
 }
 int TileMap::getWidth(){
     return width;

@@ -2,8 +2,8 @@
 // Created by cristina on 10/12/2019.
 //
 
-#ifndef UNIT_TESTING_SFML_PLAYER_H
-#define UNIT_TESTING_SFML_PLAYER_H
+#ifndef UNIT_TESTINF_SFML_PROVA2_PLAYER_H
+#define UNIT_TESTINF_SFML_PROVA2_PLAYER_H
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -39,4 +39,4 @@ private:
 
 
 
-#endif //UNIT_TESTING_SFML_PLAYER_H
+#endif //UNIT_TESTINF_SFML_PROVA2_PLAYER_H
