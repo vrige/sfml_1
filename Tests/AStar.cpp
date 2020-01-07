@@ -162,7 +162,7 @@ std::vector<int> AStar::reconstruct_path(std::unordered_map<int, int> came_from)
     int current = goal.x + goal.y*width;
     int start = posInit.x + posInit.y * width;
     while (current != start) {
-      //  std::cout<<current<<std::endl;
+     //   std::cout<<current<<std::endl;
         pathh.push_back(current);
         current = came_from[current];
     }
@@ -177,21 +177,24 @@ std::vector<char> AStar::reconstruct_EasierToReadPath(){
         int direction = *it - *(it + 1);
 
         if(direction == 1) {//left
+          //  std::cout<<'l'<<std::endl;
             dir.push_back('l');
         }
         else if(direction == -1) { //rigth
+          //  std::cout<<'r'<<std::endl;
             dir.push_back('r');
         }
         else if(direction == width){ //up
+           // std::cout<<'u'<<std::endl;
             dir.push_back('u');
         }
         else if(direction == -width){ //down
+         //   std::cout<<'d'<<std::endl;
             dir.push_back('d');
         }else{
             std::cout<<"problemi nel geteasierToReadPath"<<std::endl;
         }
     }
- //   std::cout<<"reostruct_EasierToReadPath"<<std::endl;
     return dir;
 }
 std::vector<int> AStar::getPath(){
@@ -199,4 +202,11 @@ std::vector<int> AStar::getPath(){
 }
 std::vector<char> AStar::getEasierToReadPath(){
     return easierToReadPath;
+}
+void AStar::setAstar(std::shared_ptr<std::vector<int>>& mat, int x, int y, sf::Vector2i goal, const std::string& tileset,sf::Vector2i pos){
+    width = x;
+    heigth = y;
+    posInit = pos;
+    this->goal = goal;
+    tilemap.get()->setMatrice(mat,x,y,goal,tileset,pos);
 }

@@ -28,6 +28,7 @@ public:
 
     bool load(const std::string& tileset, sf::Vector2i pos);
     bool checkGridPossibileMove(char direction, sf::Vector2i posPlayer);
+    void setMatrice(std::shared_ptr<std::vector<int>>& mat, int x, int y, sf::Vector2i goal, const std::string& tileset,sf::Vector2i pos);
 
     sf::Vector2i  makePlayerStartGreen(sf::Vector2i posInitPlayer);
     void setGoal(sf::Vector2i newGoal,const std::string& tileset,sf::Vector2i pos);

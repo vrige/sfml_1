@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     int x = 4;
     int y = 4;
     int tiles = 4;
-    int speedView = 40;
+    int speedView = 30;
     string tileSetForPlayer = "./Tests/img/game34x34.png";
     string tileSet = "./Tests/img/tileset.png";
     sf::Vector2u tileSize(32, 32);
@@ -46,6 +46,30 @@ int main(int argc, char **argv) {
 
     AStar* aStar = new AStar(map, player, map.get()->getGoal());
 
+    int matrice2[] = {
+            //0,1,2, 3,     4, 5, 6, 7,     8, 9,10, 11
+            0, 1, 0, 0,     0, 1, 0, 0,     0, 0, 0, 0,
+            0, 1, 0, 1,     0, 1, 0, 2,     1, 1, 1, 0,
+            0, 0, 0, 1,     0, 1, 0, 2,     0, 0, 0, 0,
+            1, 1, 1, 1,     0, 1, 0, 2,     0, 1, 1, 1,
+
+            1, 1, 2, 0,     0, 1, 0, 2,     0, 0, 0, 0,
+            0, 0, 2, 0,     2, 2, 0, 2,     1, 1, 1, 0,
+            0, 0, 2, 0,     0, 0, 0, 2,     0, 0, 0, 0,
+            0, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
+
+            2, 0, 0, 0,     0, 0, 0, 0,     0, 2, 2, 0,
+    };
+    std::vector<int> vettore2(matrice2, matrice2 + sizeof(matrice2) / sizeof(int));
+    auto ptr2 = make_shared<vector<int>>(vettore2);
+
+    player.get()->setPosInMatrix(0,0);
+    player.get()->setPosInSprite(sf::Vector2f(0,0));
+    sf::Vector2i nextGoal(0,6);
+    int x2 = 12;
+    int y2 = 9;
+
+    aStar->setAstar(ptr2,x2,y2,nextGoal,tileSet, player.get()->getPosInMatrix());
 
     sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
     view.setSize(736.f, 736.f);
@@ -105,8 +129,7 @@ int main(int argc, char **argv) {
                     else if (event.key.code == sf::Keyboard::A) {
                         cout << "tasto A" << endl;
                         if (!player.get()->getIsMoved()) {
-
-
+                            
                             if (aStar->findPath()) {
                                 vector<char> path = aStar->getEasierToReadPath();
 

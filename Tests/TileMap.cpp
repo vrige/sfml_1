@@ -42,6 +42,14 @@ void TileMap::print( std::shared_ptr<std::vector<int>>& matX,int x, int y){
     }
     std::cout<<std::endl;
 }
+void TileMap::setMatrice(std::shared_ptr<std::vector<int>>& mat, int x, int y, sf::Vector2i goal, const std::string& tileset,sf::Vector2i pos){
+    width = x;
+    height = y;
+    matX = std::move(mat);
+    this->goal = goal;
+    isThereAGoal = true;
+    load(tileset, pos);
+}
 void TileMap::generateGoal(sf::Vector2i pos) {
     int goalx, goaly;
     do {

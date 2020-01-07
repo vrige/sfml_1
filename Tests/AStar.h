@@ -22,6 +22,7 @@ public:
     std::vector<int> getPath();
     std::vector<char> getEasierToReadPath();
     void setGoal(sf::Vector2i newGoal,const std::string& tileset);
+    void setAstar(std::shared_ptr<std::vector<int>>& mat, int x, int y, sf::Vector2i goal, const std::string& tileset,sf::Vector2i pos);
 private:
     int h_heuristic(sf::Vector2i pos);
     int h_heuristic(int pos);

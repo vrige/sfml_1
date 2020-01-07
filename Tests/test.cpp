@@ -47,14 +47,13 @@ namespace {
         virtual void TearDown() {
             delete aStar;
         }
-        void follow( std::vector<char> path){
+        void follow( std::vector<char> path,float frametime ){
             sf::RenderWindow window(sf::VideoMode(736, 736), "Tileset");
             window.setPosition(sf::Vector2i(620,0));
             sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
             view.setSize(736.f, 736.f);
             sf::Clock clock;
             sf::Time timeSinceLastUpdate = sf::Time::Zero;
-            float frametime = 1.0f / 1.0f; //è un immagine al secondo
             sf::Time frameTime = sf::seconds(frametime);
 
             for (char iter : path) {
@@ -89,17 +88,18 @@ namespace {
 }
 
 TEST_F(AstarFixture, firstTestAstar){
-    cout<<"test1"<<endl;
+    float frametime = 1.0f / 1.0f; //è un immagine al secondo
+
+
     std::vector<int> path = { 13, 12 , 8 , 4 ,0};                         //   5, 0, 2, 0,
     std::vector<char> easierToReadPath = {'l', 'u' ,'u' ,'u'};            //   0, 0, 2, 0,
     ASSERT_EQ(aStar->findPath(),true);                         //   1, 1, 2, 0,
     ASSERT_EQ(aStar->getPath(),path); // 13 12 8 4 0                //   0, St, 2, 0,
     ASSERT_EQ(aStar->getEasierToReadPath(),easierToReadPath); //l u u u
-    follow(easierToReadPath);
+    follow(easierToReadPath,frametime);
 
 
 
-    cout<<"test2"<<endl;
     sf::Vector2i nextGoal2(3,3);                  //   St, 0, 2, 0,
     aStar->setGoal(nextGoal2, tileSet);           //   0,  0, 2, 0,
     vector<int> path2 ={};                               //   1,  1, 2, 0,
@@ -107,11 +107,10 @@ TEST_F(AstarFixture, firstTestAstar){
     ASSERT_EQ(aStar->findPath(),false);
     ASSERT_EQ(aStar->getPath(),path2); // empty
     ASSERT_EQ(aStar->getEasierToReadPath(),easierToReadPath2); // empty
-    follow(easierToReadPath2);
+    follow(easierToReadPath2,frametime);
 
 
 
-    cout<<"test3"<<endl;
     sf::Vector2i nextGoal3(1,2);
     aStar->setGoal(nextGoal3, tileSet);                    //   St, 0, 2, 0,
     vector<int> path3 ={0,1,5,9};                                 //   0,  0, 2, 0,
@@ -119,5 +118,91 @@ TEST_F(AstarFixture, firstTestAstar){
     ASSERT_EQ(aStar->findPath(),true);                 //   0,  0, 2, 0,
     ASSERT_EQ(aStar->getPath(),path3); // 0 1 5 9
     ASSERT_EQ(aStar->getEasierToReadPath(),easierToReadPath3); // r d d
-    follow(easierToReadPath3);
+    follow(easierToReadPath3,frametime);
+}
+
+
+
+TEST_F(AstarFixture, secondTestAstar){
+    float frametime = 1.0f / 6.0f;
+    int matrice2[] = {
+            //0,1,2, 3,     4, 5, 6, 7,     8, 9,10, 11
+            0, 1, 0, 0,     0, 1, 0, 0,     0, 0, 0, 0,
+            0, 1, 0, 1,     0, 1, 0, 2,     1, 1, 1, 0,
+            0, 0, 0, 1,     0, 1, 0, 2,     0, 0, 0, 0,
+            1, 1, 1, 1,     0, 1, 0, 2,     0, 1, 1, 1,
+
+            1, 1, 2, 0,     0, 1, 0, 2,     0, 0, 0, 0,
+            0, 0, 2, 0,     2, 2, 0, 2,     1, 1, 1, 0,
+            0, 0, 2, 0,     0, 0, 0, 2,     0, 0, 0, 0,
+            0, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
+
+            2, 0, 0, 0,     0, 0, 0, 0,     0, 2, 2, 0,
+
+
+    };
+    std::vector<int> vettore2(matrice2, matrice2 + sizeof(matrice2) / sizeof(int));
+    auto ptr2 = make_shared<vector<int>>(vettore2);
+
+    player.get()->setPosInMatrix(0,0);
+    player.get()->setPosInSprite(sf::Vector2f(0,0));
+    sf::Vector2i nextGoal(0,6);
+    int x2 = 12;
+    int y2 = 9;
+
+    aStar->setAstar(ptr2,x2,y2,nextGoal,tileSet, player.get()->getPosInMatrix());
+
+    std::vector<int> path = {0, 12, 24, 25, 26, 14, 2, 3, 4, 16, 28, 40, 52, 51, 63, 75, 76, 77,
+                             78, 66, 54, 42, 30, 18, 6, 7, 8, 9, 10, 11, 23, 35,34,33,32,44,56,57,
+                             58,59,71,83,82,81,80,92,104,103,102,101,100,99,98,97,85,73,72};
+    std::vector<char> easierToReadPath = {
+            'd','d','r','r','u','u','r','r','d','d','d','d','l','d','d','r','r','r','u','u','u','u','u','u','r','r',
+            'r','r','r','d','d','l','l','l','d','d','r','r','r','d','d','l','l','l','d','d','l','l','l','l','l','l',
+            'l','u','u','l'
+    };
+    ASSERT_EQ(aStar->findPath(),true);
+    EXPECT_EQ(aStar->getPath(),path);
+    EXPECT_EQ(aStar->getEasierToReadPath(),easierToReadPath);
+    follow(easierToReadPath,frametime);
+}
+
+
+TEST_F(AstarFixture, thirdTestAstar){
+    float frametime = 1.0f / 1.0f;
+    int matrice2[] = {
+            //0,1,2, 3,     4, 5, 6, 7,     8, 9,10, 11
+            0, 1, 0, 0,     0, 1, 0, 0,     0, 0, 0, 0,
+            0, 1, 0, 1,     0, 1, 0, 2,     1, 1, 1, 0,
+            0, 0, 0, 1,     0, 1, 0, 2,     0, 0, 0, 0,
+            1, 1, 1, 1,     0, 1, 0, 2,     0, 1, 1, 1,
+
+            0, 0, 2, 0,     0, 1, 0, 2,     0, 0, 0, 0,
+            0, 0, 2, 0,     2, 2, 0, 2,     1, 1, 1, 0,
+            0, 0, 2, 0,     0, 0, 0, 2,     0, 0, 0, 0,
+            0, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
+
+            2, 0, 1, 0,     0, 0, 0, 0,     0, 2, 2, 0,
+            2, 0, 1, 0,     0, 0, 0, 0,     0, 2, 2, 0,
+            2, 0, 1, 0,     0, 0, 0, 0,     0, 2, 2, 0,
+            2, 0, 0, 0,     0, 0, 0, 0,     0, 2, 2, 0,
+
+
+    };
+    std::vector<int> vettore2(matrice2, matrice2 + sizeof(matrice2) / sizeof(int));
+    auto ptr2 = make_shared<vector<int>>(vettore2);
+
+    player.get()->setPosInMatrix(0,0);
+    player.get()->setPosInSprite(sf::Vector2f(0,0));
+    sf::Vector2i nextGoal(0,6);
+    int x2 = 12;
+    int y2 = 12;
+
+    aStar->setAstar(ptr2,x2,y2,nextGoal,tileSet, player.get()->getPosInMatrix());
+
+    std::vector<int> path = {0, 12, 24, 36, 48 , 60, 72};
+    std::vector<char> easierToReadPath = {'d','d','d','d','d','d'};
+    ASSERT_EQ(aStar->findPath(),true);
+    EXPECT_EQ(aStar->getPath(),path);
+    EXPECT_EQ(aStar->getEasierToReadPath(),easierToReadPath);
+    follow(easierToReadPath,frametime);
 }
