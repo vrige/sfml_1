@@ -15,10 +15,8 @@
 
 class AStar {
 public:
-   // AStar(std::shared_ptr<TileMap> tilemap,  std::shared_ptr<Player> player, sf::Vector2i goal );
     AStar(std::shared_ptr<TileMap>& tilemap,  std::shared_ptr<Player>& player, sf::Vector2i goal );
     bool findPath();
-    void testHeuristics();
     std::vector<int> getPath();
     std::vector<char> getEasierToReadPath();
     void setGoal(sf::Vector2i newGoal,const std::string& tileset);

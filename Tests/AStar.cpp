@@ -3,12 +3,7 @@
 //
 
 #include "AStar.h"
-/*AStar::AStar(std::shared_ptr<TileMap> tilemap, std::shared_ptr<Player> player, sf::Vector2i goal ): tilemap(std::move(tilemap)),player(std::move(player)),goal(goal) {
-    width = tilemap.get()->getWidth();
-    heigth = tilemap.get()->getHeigth();
-    posInit = player.get()->getPosInMatrix();
-    //std::cout << "creazione di Astar" << std::endl;
-}*/
+
 AStar::AStar(std::shared_ptr<TileMap>& tilemap, std::shared_ptr<Player>& player, sf::Vector2i goal ): tilemap(tilemap),player(player),goal(goal) {
     width = tilemap.get()->getWidth();
     heigth = tilemap.get()->getHeigth();
@@ -96,19 +91,6 @@ bool AStar::findPath() {
         path.clear();
         easierToReadPath.clear();
         return false;
-    }
-}
-void AStar::testHeuristics(){
-    int pos = player.get()->getPosInMatrix().x +player.get()->getPosInMatrix().y * width;
-    std::cout<<"posizione attuale "<<player.get()->getPosInMatrix().x <<" " <<player.get()->getPosInMatrix().y;
-    std::cout<<"  g: "<<g_distance(pos);
-    std::cout<<",  h: "<<h_heuristic(pos);
-    std::cout<<",  f: "<<f_heuristic(pos)<<std::endl;
-
-    std::set<int> children = checkChildren(pos);
-    for(int child : children){
-        std::cout<<"figlio "<<child<<" in pos: "<< child << ", g: "<< g_distance(child) << ", h: " << h_heuristic(child);
-        std::cout<<", f: "<< f_heuristic(child)<< std::endl;
     }
 }
 std::set<int> AStar::checkChildren(sf::Vector2i pos){
