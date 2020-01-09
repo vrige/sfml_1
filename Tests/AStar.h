@@ -9,13 +9,13 @@
 #include <iterator>
 #include <unordered_map>
 #include <memory>
-#include "TileMap.h"
+#include "RenderingMap.h"
 #include "Player.h"
 #include "gtest/gtest.h"
 
 class AStar {
 public:
-    AStar(std::shared_ptr<TileMap>& tilemap,  std::shared_ptr<Player>& player, sf::Vector2i goal );
+    AStar(std::shared_ptr<RenderingMap>& tilemap, std::shared_ptr<Player>& player, sf::Vector2i goal );
     bool findPath();
     std::vector<int> getPath();
     std::vector<char> getEasierToReadPath();
@@ -35,7 +35,7 @@ private:
     std::vector<char> reconstruct_EasierToReadPath();
 
 
-    std::shared_ptr<TileMap> tilemap;
+    std::shared_ptr<RenderingMap> tilemap;
     std::shared_ptr<Player> player;
     int width;
     int heigth;

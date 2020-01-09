@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Tests/TileMap.h"
+#include "Tests/RenderingMap.h"
 #include "Tests/Player.h"
 #include "Tests/AStar.h"
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     auto ptr = make_shared<vector<int>>(vettore);
 
     auto player = make_shared<Player>(tileSetForPlayer, tileSize);
-    auto map = make_shared<TileMap>(x, y, tiles, tileSize, move(ptr), goal);
+    auto map = make_shared<RenderingMap>(x, y, tiles, tileSize, move(ptr), goal);
 
     if (!map.get()->load(tileSet, posInitPlayer)) {
         cout << "problemi nel rendering della mappa" << endl;

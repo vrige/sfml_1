@@ -2,36 +2,36 @@
 // Created by cristina on 10/12/2019.
 //
 
-#include "TileMap.h"
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>> mat, sf::Vector2i goal):
+#include "RenderingMap.h"
+RenderingMap::RenderingMap(int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>> mat, sf::Vector2i goal):
         width(x),height(y),tiles(tiles),m_tileSize(tileSize), goal(goal){
     matX = std::move(mat);
     isThereAGoal = true;
    // print(matX,x,y);
     srand((unsigned)time(nullptr));
 }
-TileMap::TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>>& mat, sf::Vector2i goal):
+RenderingMap::RenderingMap(int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>>& mat, sf::Vector2i goal):
         width(x),height(y),tiles(tiles),m_tileSize(tileSize), goal(goal){
     matX = std::move(mat);
     isThereAGoal = true;
     // print(matX,x,y);
     srand((unsigned)time(nullptr));
 }
-void TileMap::matXCasuale(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n){
+void RenderingMap::matXCasuale(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n){
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
             setValueAt(i + j * x, genRandomNumber(n));
         }
     }
 }
-void TileMap::matXCasualeWithPercentage(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n, int percentage){
+void RenderingMap::matXCasualeWithPercentage(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n, int percentage){
     for(int i = 0; i < x; i++){
         for(int j = 0; j < y; j++){
             setValueAt(i + j * x, genRandomNumberWithPercentage(n,percentage));
         }
     }
 }
-void TileMap::print( std::shared_ptr<std::vector<int>>& matX,int x, int y){
+void RenderingMap::print(std::shared_ptr<std::vector<int>>& matX, int x, int y){
     std::string a;
     for(int j = 0; j < y; j++){
         for(int i = 0; i < x; i++){
@@ -42,7 +42,7 @@ void TileMap::print( std::shared_ptr<std::vector<int>>& matX,int x, int y){
     }
     std::cout<<std::endl;
 }
-void TileMap::setMatrice(std::shared_ptr<std::vector<int>>& mat, int x, int y, sf::Vector2i goal, const std::string& tileset,sf::Vector2i pos){
+void RenderingMap::setMatrice(std::shared_ptr<std::vector<int>>& mat, int x, int y, sf::Vector2i goal, const std::string& tileset, sf::Vector2i pos){
     width = x;
     height = y;
     matX = std::move(mat);
@@ -50,7 +50,7 @@ void TileMap::setMatrice(std::shared_ptr<std::vector<int>>& mat, int x, int y, s
     isThereAGoal = true;
     load(tileset, pos);
 }
-void TileMap::generateGoal(sf::Vector2i pos) {
+void RenderingMap::generateGoal(sf::Vector2i pos) {
     int goalx, goaly;
     do {
         goalx = genRandomNumber(width);
@@ -61,7 +61,7 @@ void TileMap::generateGoal(sf::Vector2i pos) {
     goal = sf::Vector2i(goalx,goaly);
     isThereAGoal = true;
 }
-void TileMap::setGoal(sf::Vector2i newGoal, const std::string& tileset,sf::Vector2i pos){
+void RenderingMap::setGoal(sf::Vector2i newGoal, const std::string& tileset, sf::Vector2i pos){
     if(isThereAGoal){
         setValueAt(goal, 0);
     }
@@ -69,7 +69,7 @@ void TileMap::setGoal(sf::Vector2i newGoal, const std::string& tileset,sf::Vecto
 
     load(tileset, pos);
 }
-bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
+bool RenderingMap::load(const std::string& tileset, sf::Vector2i pos)
 {
     if (!m_tileset.loadFromFile(tileset)){
         std::cout<<"problemi nello scaricare la texture della mappa"<< std::endl;
@@ -119,7 +119,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2i pos)
     }
     return true;
 }
-sf::Vector2i  TileMap::makePlayerStartGreen( sf::Vector2i posInitPlayer){
+sf::Vector2i  RenderingMap::makePlayerStartGreen(sf::Vector2i posInitPlayer){
     unsigned int i = posInitPlayer.x;
     unsigned int j = posInitPlayer.y;
     if(getValueAt(i + j * width) != 0) {
@@ -142,12 +142,12 @@ sf::Vector2i  TileMap::makePlayerStartGreen( sf::Vector2i posInitPlayer){
     }
     return sf::Vector2i(i, j);
 }
-int TileMap::genRandomNumber(int n){
+int RenderingMap::genRandomNumber(int n){
     int i;
     i = (rand()%n);
     return i;
 }
-int TileMap::genRandomNumberWithPercentage(int n, int percentage){
+int RenderingMap::genRandomNumberWithPercentage(int n, int percentage){
     int i;
     i = (rand()%100) + 1; // da 0 a 99
     if(i <= percentage){
@@ -156,7 +156,7 @@ int TileMap::genRandomNumberWithPercentage(int n, int percentage){
     i = (i % (n - 1)) + 1;
     return i;
 }
-bool TileMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
+bool RenderingMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ // si basa sul fatto che l'elemento 0 della matric è l'unico attraversabile
     // std::cout<<" player from: "<< .x <<" " <<.y<< std::endl;
     int num = posPlayer.x + posPlayer.y * width;
     std::set<int> allowedTiles = {0,1,5};
@@ -190,27 +190,27 @@ bool TileMap::checkGridPossibileMove(char direction, sf::Vector2i posPlayer){ //
     }
     return true;
 }
-sf::Vector2i TileMap::getGoal(){
+sf::Vector2i RenderingMap::getGoal(){
     return goal;
 }
-int TileMap::getValueAt(int num){
+int RenderingMap::getValueAt(int num){
     if(num < matX.get()->size() && num >= 0){
         return matX.get()->at(num);
     }else{
         return 3; //3 è un ostacolo
     }
 }
-void TileMap::setValueAt(int pos, int num){
+void RenderingMap::setValueAt(int pos, int num){
     if(pos < matX.get()->size() && pos >= 0){
         matX.get()->at(pos) = num;
     }
 }
-void TileMap::setValueAt(sf::Vector2i pos, int num){
+void RenderingMap::setValueAt(sf::Vector2i pos, int num){
     setValueAt(pos.x + width * pos.y, num);
 }
-int TileMap::getWidth(){
+int RenderingMap::getWidth(){
     return width;
 }
-int TileMap::getHeigth(){
+int RenderingMap::getHeigth(){
     return height;
 }

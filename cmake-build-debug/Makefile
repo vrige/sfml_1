@@ -247,33 +247,6 @@ Tests/AStar.cpp.s:
 	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/AStar.cpp.s
 .PHONY : Tests/AStar.cpp.s
 
-Tests/ClassName.obj: Tests/ClassName.cpp.obj
-
-.PHONY : Tests/ClassName.obj
-
-# target to build an object file
-Tests/ClassName.cpp.obj:
-	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/ClassName.cpp.obj
-.PHONY : Tests/ClassName.cpp.obj
-
-Tests/ClassName.i: Tests/ClassName.cpp.i
-
-.PHONY : Tests/ClassName.i
-
-# target to preprocess a source file
-Tests/ClassName.cpp.i:
-	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/ClassName.cpp.i
-.PHONY : Tests/ClassName.cpp.i
-
-Tests/ClassName.s: Tests/ClassName.cpp.s
-
-.PHONY : Tests/ClassName.s
-
-# target to generate assembly for a file
-Tests/ClassName.cpp.s:
-	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/ClassName.cpp.s
-.PHONY : Tests/ClassName.cpp.s
-
 Tests/Player.obj: Tests/Player.cpp.obj
 
 .PHONY : Tests/Player.obj
@@ -301,32 +274,32 @@ Tests/Player.cpp.s:
 	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/Player.cpp.s
 .PHONY : Tests/Player.cpp.s
 
-Tests/TileMap.obj: Tests/TileMap.cpp.obj
+Tests/RenderingMap.obj: Tests/RenderingMap.cpp.obj
 
-.PHONY : Tests/TileMap.obj
+.PHONY : Tests/RenderingMap.obj
 
 # target to build an object file
-Tests/TileMap.cpp.obj:
-	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/TileMap.cpp.obj
-.PHONY : Tests/TileMap.cpp.obj
+Tests/RenderingMap.cpp.obj:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/RenderingMap.cpp.obj
+.PHONY : Tests/RenderingMap.cpp.obj
 
-Tests/TileMap.i: Tests/TileMap.cpp.i
+Tests/RenderingMap.i: Tests/RenderingMap.cpp.i
 
-.PHONY : Tests/TileMap.i
+.PHONY : Tests/RenderingMap.i
 
 # target to preprocess a source file
-Tests/TileMap.cpp.i:
-	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/TileMap.cpp.i
-.PHONY : Tests/TileMap.cpp.i
+Tests/RenderingMap.cpp.i:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/RenderingMap.cpp.i
+.PHONY : Tests/RenderingMap.cpp.i
 
-Tests/TileMap.s: Tests/TileMap.cpp.s
+Tests/RenderingMap.s: Tests/RenderingMap.cpp.s
 
-.PHONY : Tests/TileMap.s
+.PHONY : Tests/RenderingMap.s
 
 # target to generate assembly for a file
-Tests/TileMap.cpp.s:
-	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/TileMap.cpp.s
-.PHONY : Tests/TileMap.cpp.s
+Tests/RenderingMap.cpp.s:
+	$(MAKE) -f CMakeFiles\unit_testing_sfml_prova.dir\build.make CMakeFiles/unit_testing_sfml_prova.dir/Tests/RenderingMap.cpp.s
+.PHONY : Tests/RenderingMap.cpp.s
 
 Tests/test.obj: Tests/test.cpp.obj
 
@@ -402,15 +375,12 @@ help:
 	@echo ... Tests/AStar.obj
 	@echo ... Tests/AStar.i
 	@echo ... Tests/AStar.s
-	@echo ... Tests/ClassName.obj
-	@echo ... Tests/ClassName.i
-	@echo ... Tests/ClassName.s
 	@echo ... Tests/Player.obj
 	@echo ... Tests/Player.i
 	@echo ... Tests/Player.s
-	@echo ... Tests/TileMap.obj
-	@echo ... Tests/TileMap.i
-	@echo ... Tests/TileMap.s
+	@echo ... Tests/RenderingMap.obj
+	@echo ... Tests/RenderingMap.i
+	@echo ... Tests/RenderingMap.s
 	@echo ... Tests/test.obj
 	@echo ... Tests/test.i
 	@echo ... Tests/test.s

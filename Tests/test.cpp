@@ -3,7 +3,7 @@
 //
 #include "gtest/gtest.h"
 #include "Player.h"
-#include "TileMap.h"
+#include "RenderingMap.h"
 #include "AStar.h"
 
 using namespace std;
@@ -30,7 +30,7 @@ namespace {
             auto ptr = make_shared<vector<int>>(vettore);
 
             player = make_shared<Player>(tileSetForPlayer, tileSize);
-            map = make_shared<TileMap>(x, y, tiles, tileSize, move(ptr), goal);
+            map = make_shared<RenderingMap>(x, y, tiles, tileSize, move(ptr), goal);
 
             if (!map.get()->load(tileSet, posInitPlayer)) {
                 cout << "problemi nel rendering della mappa" << endl;
@@ -81,7 +81,7 @@ namespace {
         }
         string tileSet = "./Tests/img/tileset.png";
         shared_ptr<Player> player;
-        shared_ptr<TileMap> map;
+        shared_ptr<RenderingMap> map;
         AStar *aStar;
     };
 
@@ -135,7 +135,7 @@ TEST_F(AstarFixture, secondTestAstar){
             1, 1, 2, 0,     0, 1, 0, 2,     0, 0, 0, 0,
             0, 0, 2, 0,     2, 2, 0, 2,     1, 1, 1, 0,
             0, 0, 2, 0,     0, 0, 0, 2,     0, 0, 0, 0,
-            0, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
+            1, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
 
             2, 0, 0, 0,     0, 0, 0, 0,     0, 2, 2, 0,
 
@@ -168,7 +168,7 @@ TEST_F(AstarFixture, secondTestAstar){
 
 
 TEST_F(AstarFixture, thirdTestAstar){
-    float frametime = 1.0f / 1.0f;
+    float frametime = 1.0f / 2.0f;
     int matrice2[] = {
             //0,1,2, 3,     4, 5, 6, 7,     8, 9,10, 11
             0, 1, 0, 0,     0, 1, 0, 0,     0, 0, 0, 0,
@@ -179,7 +179,7 @@ TEST_F(AstarFixture, thirdTestAstar){
             0, 0, 2, 0,     0, 1, 0, 2,     0, 0, 0, 0,
             0, 0, 2, 0,     2, 2, 0, 2,     1, 1, 1, 0,
             0, 0, 2, 0,     0, 0, 0, 2,     0, 0, 0, 0,
-            0, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
+            1, 0, 2, 2,     2, 2, 2, 2,     0, 1, 1, 1,
 
             2, 0, 1, 0,     0, 0, 0, 0,     0, 2, 2, 0,
             2, 0, 1, 0,     0, 0, 0, 0,     0, 2, 2, 0,

@@ -4,7 +4,7 @@
 
 #include "AStar.h"
 
-AStar::AStar(std::shared_ptr<TileMap>& tilemap, std::shared_ptr<Player>& player, sf::Vector2i goal ): tilemap(tilemap),player(player),goal(goal) {
+AStar::AStar(std::shared_ptr<RenderingMap>& tilemap, std::shared_ptr<Player>& player, sf::Vector2i goal ): tilemap(tilemap), player(player), goal(goal) {
     width = tilemap.get()->getWidth();
     heigth = tilemap.get()->getHeigth();
     posInit = player.get()->getPosInMatrix();

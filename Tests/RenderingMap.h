@@ -15,11 +15,11 @@
 #include "gtest/gtest.h"
 
 
-class TileMap  : public sf::ConvexShape{
+class RenderingMap  : public sf::ConvexShape{
 public:
 
-    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>>& mat, sf::Vector2i goal);
-    TileMap( int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>> mat, sf::Vector2i goal);
+    RenderingMap(int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>>& mat, sf::Vector2i goal);
+    RenderingMap(int x, int y, int tiles, sf::Vector2u tileSize, std::shared_ptr<std::vector<int>> mat, sf::Vector2i goal);
 
 
     void matXCasuale(std::shared_ptr<std::vector<int>>& matX, int x, int y, int n);
